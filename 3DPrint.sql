@@ -67,3 +67,13 @@ create table material(
     light_off_delay decimal(18,2)
 );
 
+alter table project add foreign key (user) references user(id);
+
+alter table print_object add foreign key (project) references project(id);
+
+alter table print_job add foreign key (printer) references printer(id);
+
+alter table print_job add foreign key (print_object) references print_object(id);
+
+alter table print_job add foreign key (material) references material(id);
+
