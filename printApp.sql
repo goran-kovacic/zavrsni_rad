@@ -1,8 +1,8 @@
-# c:\xampp\mysql\bin\mysql -uroot --default_character_set=utf8 < C:\Users\AMD\Documents\GitHub\zavrsni_rad\PrintApp.sql
+# c:\xampp\mysql\bin\mysql -uroot --default_character_set=utf8 < C:\Users\AMD\Documents\GitHub\zavrsni_rad\printApp.sql
 
-drop database if exists PrintApp;
-create database PrintApp;
-use PrintApp;
+drop database if exists printApp;
+create database printApp;
+use printApp;
 
 create table project(
     id int not null primary key auto_increment,
