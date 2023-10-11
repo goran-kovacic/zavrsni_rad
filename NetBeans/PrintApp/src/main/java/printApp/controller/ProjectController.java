@@ -1,0 +1,64 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package printApp.controller;
+
+import java.util.List;
+import printApp.model.Project;
+import printApp.util.PrintAppException;
+import java.time.LocalDate;
+
+/**
+ *
+ * @author AMD
+ */
+public class ProjectController extends Controller<Project>{
+
+    @Override
+    public List<Project> read() {
+        return session.createQuery("from Project", Project.class).list();
+    }
+
+    @Override
+    protected void controlCreate() throws PrintAppException {
+       controlName();
+       controlDate();
+    }
+
+    @Override
+    protected void controlUpdate() throws PrintAppException {
+      
+    }
+
+    @Override
+    protected void controlDelete() throws PrintAppException {
+       
+    }
+
+    private void controlName() throws PrintAppException{
+        
+        if(entitet.getProjectName()==null){
+            throw new PrintAppException("Project name must be defined!");
+        }
+        if(entitet.getProjectName().isEmpty()){
+            throw new PrintAppException("Project name cannot be emtpy!");
+        }
+        
+    }
+
+    private void controlDate() throws PrintAppException{
+        
+        if(entitet.getCompletionDate().before(entitet.getCreationDate())){
+            throw new PrintAppException("Completion date cannot be earlier than the creation date");
+        }
+        
+        if(entitet.getCreationDate().after(entitet.getCompletionDate())){
+            throw new PrintAppException("Creation date cannot be later than the completion date");
+        }
+        
+    }
+    
+    
+    
+}
