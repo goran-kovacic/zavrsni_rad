@@ -1,39 +1,41 @@
 package printApp.model;
 
+import jakarta.persistence.Column;
 import java.sql.Time;
 import java.util.Date;
 import jakarta.persistence.Entity;
+import java.math.BigDecimal;
 
 @Entity
 public class Project extends Entitet{
 	
+        @Column(nullable = false)
 	private String projectName;
+        
 	private Date creationDate;
 	private Date completionDate;
+        @Column(columnDefinition = "boolean")
 	private boolean isCompleted;
+        
 	private Time totalPrintTime;
-	private int totalPrintCount;
-	private float totalCost;
+        @Column(nullable = true)
+	private Integer totalPrintCount;
+        @Column(nullable = true)
+	private BigDecimal totalCost;
 	private String projectDescription;
-	
-	
-	
-	
-	
-	
-	public Project(int id, String projectName, Date creationDate, Date completionDate, boolean isCompleted,
-			Time totalPrintTime, int totalPrintCount, float totalCost, String projectDescription) {
-		super(id);
-		this.projectName = projectName;
-		this.creationDate = creationDate;
-		this.completionDate = completionDate;
-		this.isCompleted = isCompleted;
-		this.totalPrintTime = totalPrintTime;
-		this.totalPrintCount = totalPrintCount;
-		this.totalCost = totalCost;
-		this.projectDescription = projectDescription;
+
+    public Project(Integer id, String projectName, Date creationDate, Date completionDate, boolean isCompleted, Time totalPrintTime, Integer totalPrintCount, BigDecimal totalCost, String projectDescription) {
+        super(id);
+        this.projectName = projectName;
+        this.creationDate = creationDate;
+        this.completionDate = completionDate;
+        this.isCompleted = isCompleted;
+        this.totalPrintTime = totalPrintTime;
+        this.totalPrintCount = totalPrintCount;
+        this.totalCost = totalCost;
+        this.projectDescription = projectDescription;
+    }
 		
-	}
 	public Project() {
 		super();
 	}
@@ -67,16 +69,16 @@ public class Project extends Entitet{
 	public void setTotalPrintTime(Time totalPrintTime) {
 		this.totalPrintTime = totalPrintTime;
 	}
-	public int getTotalPrintCount() {
+	public Integer getTotalPrintCount() {
 		return totalPrintCount;
 	}
-	public void setTotalPrintCount(int totalPrintCount) {
+	public void setTotalPrintCount(Integer totalPrintCount) {
 		this.totalPrintCount = totalPrintCount;
 	}
-	public float getTotalCost() {
+	public BigDecimal getTotalCost() {
 		return totalCost;
 	}
-	public void setTotalCost(float totalCost) {
+	public void setTotalCost(BigDecimal totalCost) {
 		this.totalCost = totalCost;
 	}
 	public String getProjectDescription() {

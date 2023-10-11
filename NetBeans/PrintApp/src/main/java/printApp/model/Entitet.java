@@ -7,30 +7,24 @@ import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
 public abstract class Entitet {
-	
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	
-	
 
-	public Entitet() {
-		super();
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	public Entitet(int id) {
-		super();
-		this.id = id;
-	}
+    public Entitet(Integer id) {
+        this.id = id;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public Entitet() {
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
 }

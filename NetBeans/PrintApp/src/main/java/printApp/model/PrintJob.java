@@ -1,11 +1,19 @@
 package printApp.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
+import java.math.BigDecimal;
+
+@Entity
 public class PrintJob extends Entitet {
 	
-	private float cost;
+	private BigDecimal cost;
 	private boolean result;
+        @ManyToOne
 	private Printer printer;
+        @ManyToOne
 	private Material material;
+        @ManyToOne
 	private Part part;
 	
 	
@@ -13,7 +21,7 @@ public class PrintJob extends Entitet {
 	public PrintJob() {
 		super();
 	}
-	public PrintJob(int id, float cost, boolean result, Printer printer, Material material, Part part) {
+	public PrintJob(Integer id, BigDecimal cost, boolean result, Printer printer, Material material, Part part) {
 		super(id);
 		this.cost = cost;
 		this.result = result;
@@ -21,10 +29,10 @@ public class PrintJob extends Entitet {
 		this.material = material;
 		this.part = part;
 	}
-	public float getCost() {
+	public BigDecimal getCost() {
 		return cost;
 	}
-	public void setCost(float cost) {
+	public void setCost(BigDecimal cost) {
 		this.cost = cost;
 	}
 	public boolean isResult() {

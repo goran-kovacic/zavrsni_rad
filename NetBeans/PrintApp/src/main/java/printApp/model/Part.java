@@ -1,20 +1,26 @@
 package printApp.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 
 
+@Entity
 public class Part extends Entitet {
 	
+        @Column(nullable = false)
 	private String partName;
 	private String stlOriginal;
 	private String stlSupported;
 	private String slicedFile;
+        @ManyToOne
 	private Project project;
 	
 	
 	
 	
 	
-	public Part(int id, String partName, String stlOriginal, String stlSupported, String slicedFile, Project project) {
+	public Part(Integer id, String partName, String stlOriginal, String stlSupported, String slicedFile, Project project) {
 		super(id);
 		this.partName = partName;
 		this.stlOriginal = stlOriginal;

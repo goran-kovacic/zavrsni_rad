@@ -19,6 +19,11 @@
     <property name="hbm2ddl.auto">update</property>
     
     <mapping class="printApp.model.Project" />
+    <mapping class="printApp.model.Part" />
+    <mapping class="printApp.model.User" />
+    <mapping class="printApp.model.Printer" />
+    <mapping class="printApp.model.Material" />
+    <mapping class="printApp.model.PrintJob" />
     
   </session-factory>
 </hibernate-configuration>
