@@ -4,7 +4,10 @@
 
 package printApp;
 
+import com.github.javafaker.Faker;
+import java.util.Locale;
 import printApp.util.HibernateUtil;
+import printApp.util.InitialInsert;
 
 /**
  *
@@ -14,7 +17,10 @@ public class Start {
 
     public static void main(String[] args) {
         
-        HibernateUtil.getSession();
+       // HibernateUtil.getSession();
+        
+       new InitialInsert();
+       
         
     }
 }

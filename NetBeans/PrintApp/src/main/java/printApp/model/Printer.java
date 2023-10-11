@@ -2,7 +2,7 @@ package printApp.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import java.sql.Time;
+
 
 
 @Entity
@@ -12,14 +12,14 @@ public class Printer extends Entitet {
     private String printerName;
     @Column(nullable = false)
     private String manufacturer;
-    private Time printerTime;
+    private Integer printerTime;
     private Integer fepCount;
 
     public Printer() {
         super();
     }
 
-    public Printer(Integer id, String printerName, String manufacturer, Time printerTime, Integer fepCount) {
+    public Printer(Integer id, String printerName, String manufacturer, Integer printerTime, Integer fepCount) {
         super(id);
         this.printerName = printerName;
         this.manufacturer = manufacturer;
@@ -43,11 +43,11 @@ public class Printer extends Entitet {
         this.manufacturer = manufacturer;
     }
 
-    public Time getPrinterTime() {
+    public Integer getPrinterTime() {
         return printerTime;
     }
 
-    public void setPrinterTime(Time printerTime) {
+    public void setPrinterTime(Integer printerTime) {
         this.printerTime = printerTime;
     }
 

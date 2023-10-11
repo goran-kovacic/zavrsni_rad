@@ -1,7 +1,6 @@
 package printApp.model;
 
 import jakarta.persistence.Column;
-import java.sql.Time;
 import java.util.Date;
 import jakarta.persistence.Entity;
 import java.math.BigDecimal;
@@ -17,14 +16,14 @@ public class Project extends Entitet{
         @Column(columnDefinition = "boolean")
 	private boolean isCompleted;
         
-	private Time totalPrintTime;
+	private Integer totalPrintTime;
         @Column(nullable = true)
 	private Integer totalPrintCount;
         @Column(nullable = true)
 	private BigDecimal totalCost;
 	private String projectDescription;
 
-    public Project(Integer id, String projectName, Date creationDate, Date completionDate, boolean isCompleted, Time totalPrintTime, Integer totalPrintCount, BigDecimal totalCost, String projectDescription) {
+    public Project(Integer id, String projectName, Date creationDate, Date completionDate, boolean isCompleted, Integer totalPrintTime, Integer totalPrintCount, BigDecimal totalCost, String projectDescription) {
         super(id);
         this.projectName = projectName;
         this.creationDate = creationDate;
@@ -63,10 +62,10 @@ public class Project extends Entitet{
 	public void setCompleted(boolean isCompleted) {
 		this.isCompleted = isCompleted;
 	}
-	public Time getTotalPrintTime() {
+	public Integer getTotalPrintTime() {
 		return totalPrintTime;
 	}
-	public void setTotalPrintTime(Time totalPrintTime) {
+	public void setTotalPrintTime(Integer totalPrintTime) {
 		this.totalPrintTime = totalPrintTime;
 	}
 	public Integer getTotalPrintCount() {
