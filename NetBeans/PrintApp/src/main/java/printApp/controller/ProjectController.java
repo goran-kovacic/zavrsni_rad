@@ -49,12 +49,12 @@ public class ProjectController extends Controller<Project>{
 
     private void controlDate() throws PrintAppException{
         
-        if(entitet.getCompletionDate().before(entitet.getCreationDate())){
-            throw new PrintAppException("Completion date cannot be earlier than the creation date");
+        if(entitet.getCompletionDate()==null){
+            return;
         }
         
         if(entitet.getCreationDate().after(entitet.getCompletionDate())){
-            throw new PrintAppException("Creation date cannot be later than the completion date");
+            throw new PrintAppException("Completion date cannot be earlier than the creation date");
         }
         
     }

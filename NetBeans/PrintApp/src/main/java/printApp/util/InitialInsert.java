@@ -124,7 +124,7 @@ public class InitialInsert {
             p = new PrintJob();
             p.setPrintTime(faker.number().numberBetween(1, 10));
             p.setResult(faker.bool().bool());
-            p.setVolume(new BigDecimal(faker.number().numberBetween(0, 2)));
+            p.setVolume(new BigDecimal(faker.number().numberBetween(0, 500)));
             p.setMaterial(materials.get(faker.number().numberBetween(0, NUMBER_OF_MATERIALS - 1)));
             p.setPart(parts.get(faker.number().numberBetween(0, NUMBER_OF_PARTS - 1)));
             p.setPrinter(printers.get(faker.number().numberBetween(0, NUMBER_OF_PRINTERS - 1)));
