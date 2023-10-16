@@ -3,6 +3,8 @@
  */
 package printApp;
 
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
@@ -10,10 +12,14 @@ import java.util.logging.Logger;
 import printApp.controller.MaterialController;
 import printApp.controller.PrinterController;
 import printApp.controller.ProjectController;
+import printApp.controller.UserController;
 import printApp.model.Material;
 import printApp.model.Printer;
 import printApp.model.Project;
+import printApp.model.User;
 import printApp.util.PrintAppException;
+import printApp.view.Login;
+import printApp.view.SplashScreen;
 
 /**
  *
@@ -26,24 +32,30 @@ public class Start {
         // HibernateUtil.getSession();
         // new InitialInsert();
         
-        PrinterController pc = new PrinterController();
-        Printer p = new Printer();
-        /*
-        p.setPrinterName("printer X");
-        p.setManufacturer("elegoo");
-        p.setPrinterTime(220);
-        p.setFepCount(12);
-        */
-        pc.setEntitet(p);
-         
-        
-        try {
-           pc.create();
-        } catch (PrintAppException ex) {
-            System.out.println(ex.getMessage());
-        }
+        new SplashScreen().setVisible(true);
+            
         
     }
+    
+    private static void pw(){
+        Argon2 argon2 = Argon2Factory.create();
+        
+        String hash = argon2.hash(10, 65536, 1, "admin".toCharArray());
+        
+        UserController oo = new UserController();
+        User o = new User();
+        o.setUserName("admin");
+        o.setUserPassword(hash);
+        
+        oo.setEntitet(o);
+        
+        try {
+            oo.create();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+}
 
     private static void inputDate() {
 
