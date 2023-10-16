@@ -3,26 +3,16 @@
  */
 package printApp;
 
-import com.github.javafaker.Faker;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import printApp.controller.Controller;
-import printApp.controller.PartController;
-import printApp.controller.PrintJobController;
+import printApp.controller.MaterialController;
+import printApp.controller.PrinterController;
 import printApp.controller.ProjectController;
-import printApp.model.Part;
-import printApp.model.PrintJob;
+import printApp.model.Material;
+import printApp.model.Printer;
 import printApp.model.Project;
-import printApp.util.HibernateUtil;
-import printApp.util.InitialInsert;
 import printApp.util.PrintAppException;
 
 /**
@@ -36,16 +26,19 @@ public class Start {
         // HibernateUtil.getSession();
         // new InitialInsert();
         
-        PrintJobController pc = new PrintJobController();
-        
-        PrintJob p = new PrintJob();
-        
-        p.setVolume(BigDecimal.valueOf(0));
-        
+        PrinterController pc = new PrinterController();
+        Printer p = new Printer();
+        /*
+        p.setPrinterName("printer X");
+        p.setManufacturer("elegoo");
+        p.setPrinterTime(220);
+        p.setFepCount(12);
+        */
         pc.setEntitet(p);
+         
         
         try {
-            pc.create();
+           pc.create();
         } catch (PrintAppException ex) {
             System.out.println(ex.getMessage());
         }

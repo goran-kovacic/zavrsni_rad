@@ -33,7 +33,10 @@ public class PartController extends Controller<Part> {
 
     @Override
     protected void controlUpdate() throws PrintAppException {
-
+        controlName();
+        controlStlOriginal();
+        controlStlSupported();
+        controlSlicedFile();
     }
 
     @Override
@@ -65,28 +68,28 @@ public class PartController extends Controller<Part> {
 
     }
 
-    private void controlStlSupported() throws PrintAppException{
-       try {
+    private void controlStlSupported() throws PrintAppException {
+        try {
             Path p = Paths.get(entitet.getStlSupported());
-            
-            if(!p.isAbsolute() || p.toFile().isDirectory()){
+
+            if (!p.isAbsolute() || p.toFile().isDirectory()) {
                 throw new PrintAppException("Not a valid file path!");
             }
         } catch (NullPointerException e) {
         }
     }
 
-    private void controlSlicedFile() throws PrintAppException{
-        
+    private void controlSlicedFile() throws PrintAppException {
+
         try {
             Path p = Paths.get(entitet.getSlicedFile());
-            
-            if(!p.isAbsolute() || p.toFile().isDirectory()){
+
+            if (!p.isAbsolute() || p.toFile().isDirectory()) {
                 throw new PrintAppException("Not a valid file path!");
             }
         } catch (NullPointerException e) {
         }
-        
+
     }
 
 }

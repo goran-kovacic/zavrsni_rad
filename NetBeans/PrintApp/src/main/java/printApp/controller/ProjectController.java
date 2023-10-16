@@ -7,13 +7,12 @@ package printApp.controller;
 import java.util.List;
 import printApp.model.Project;
 import printApp.util.PrintAppException;
-import java.time.LocalDate;
 
 /**
  *
  * @author AMD
  */
-public class ProjectController extends Controller<Project>{
+public class ProjectController extends Controller<Project> {
 
     @Override
     public List<Project> read() {
@@ -22,43 +21,42 @@ public class ProjectController extends Controller<Project>{
 
     @Override
     protected void controlCreate() throws PrintAppException {
-       controlName();
-       controlDate();
+        controlName();
+        controlDate();
     }
 
     @Override
     protected void controlUpdate() throws PrintAppException {
-      
+        controlName();
+        controlDate();
     }
 
     @Override
     protected void controlDelete() throws PrintAppException {
-       
+
     }
 
-    private void controlName() throws PrintAppException{
-        
-        if(entitet.getProjectName()==null){
+    private void controlName() throws PrintAppException {
+
+        if (entitet.getProjectName() == null) {
             throw new PrintAppException("Project name must be defined!");
         }
-        if(entitet.getProjectName().isEmpty()){
+        if (entitet.getProjectName().isEmpty()) {
             throw new PrintAppException("Project name cannot be emtpy!");
         }
-        
+
     }
 
-    private void controlDate() throws PrintAppException{
-        
-        if(entitet.getCompletionDate()==null){
+    private void controlDate() throws PrintAppException {
+
+        if (entitet.getCompletionDate() == null) {
             return;
         }
-        
-        if(entitet.getCreationDate().after(entitet.getCompletionDate())){
+
+        if (entitet.getCreationDate().after(entitet.getCompletionDate())) {
             throw new PrintAppException("Completion date cannot be earlier than the creation date");
         }
-        
+
     }
-    
-    
-    
+
 }

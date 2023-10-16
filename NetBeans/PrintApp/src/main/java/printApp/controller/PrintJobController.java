@@ -12,42 +12,56 @@ import printApp.util.PrintAppException;
  *
  * @author AMD
  */
-public class PrintJobController extends Controller<PrintJob>{
+public class PrintJobController extends Controller<PrintJob> {
 
     @Override
     public List<PrintJob> read() {
-       return session.createQuery("from PrintJob", PrintJob.class).list();
+        return session.createQuery("from PrintJob", PrintJob.class).list();
     }
 
     @Override
     protected void controlCreate() throws PrintAppException {
-       
+
         controlVolume();
-        
+        controlPrintTime();
     }
 
     @Override
     protected void controlUpdate() throws PrintAppException {
-       
+        controlVolume();
+        controlPrintTime();
     }
 
     @Override
     protected void controlDelete() throws PrintAppException {
-       
+
     }
 
-    private void controlVolume() throws PrintAppException{
-       
-        if(entitet.getVolume().floatValue()>2000f){
+    private void controlVolume() throws PrintAppException {
+
+        if (entitet.getVolume() == null) {
+            return;
+        }
+
+        if (entitet.getVolume().floatValue() > 2000f) {
             throw new PrintAppException("Volume cannot be greater than 2000mL");
         }
-        
-        if(entitet.getVolume().floatValue()<=0f){
-              throw new PrintAppException("Volume must be a positive number!");
+
+        if (entitet.getVolume().floatValue() <= 0f) {
+            throw new PrintAppException("Volume must be a positive number!");
         }
-        
+
     }
-    
-    
-    
+
+    private void controlPrintTime() throws PrintAppException {
+        if (entitet.getPrintTime() == null) {
+            return;
+        }
+
+        if (entitet.getPrintTime() <= 0) {
+            throw new PrintAppException("Print time must be a positive number!");
+        }
+
+    }
+
 }
