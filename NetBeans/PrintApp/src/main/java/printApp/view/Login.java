@@ -28,7 +28,7 @@ public class Login extends javax.swing.JFrame {
 
         control = new UserController();
 
-        setTitle(Util.APP_NAME);
+        //setTitle(Util.APP_NAME);
 
     }
 
@@ -53,6 +53,7 @@ public class Login extends javax.swing.JFrame {
 
         jLabel1.setText("User Name");
 
+        txtUserName.setText("admin");
         txtUserName.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtUserNameKeyPressed(evt);
@@ -61,6 +62,7 @@ public class Login extends javax.swing.JFrame {
 
         jLabel2.setText("Password");
 
+        txtPassword.setText("admin");
         txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtPasswordKeyPressed(evt);
@@ -80,14 +82,14 @@ public class Login extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(60, 60, 60)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
                     .addComponent(txtUserName)
                     .addComponent(txtPassword)
                     .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE))
-                .addGap(60, 60, 60))
+                .addGap(30, 30, 30))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -102,7 +104,7 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
                 .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60))
+                .addGap(30, 30, 30))
         );
 
         pack();
@@ -130,8 +132,13 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(getRootPane(), "Invalid username and password");
             return;
         }
+        User logged = new User();
+        logged.setUserName(u.getUserName());
+        
+        Util.USER=logged;
 
-        System.out.println(u.getUserName());
+        new Menu().setVisible(true);
+        dispose();
 
     }//GEN-LAST:event_btnLoginActionPerformed
 

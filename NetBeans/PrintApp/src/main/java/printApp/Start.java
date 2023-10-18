@@ -37,25 +37,7 @@ public class Start {
         
     }
     
-    private static void pw(){
-        Argon2 argon2 = Argon2Factory.create();
-        
-        String hash = argon2.hash(10, 65536, 1, "admin".toCharArray());
-        
-        UserController oo = new UserController();
-        User o = new User();
-        o.setUserName("admin");
-        o.setUserPassword(hash);
-        
-        oo.setEntitet(o);
-        
-        try {
-            oo.create();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-}
+    
 
     private static void inputDate() {
 
@@ -64,7 +46,7 @@ public class Start {
         p.setProjectName("kontrola datum");
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String dateInString = "2023-08-15";
+        //String dateInString = "2023-08-15";
 
         try {            
             p.setCreationDate(sdf.parse("2023-08-15"));

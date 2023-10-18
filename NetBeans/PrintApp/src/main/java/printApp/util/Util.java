@@ -4,6 +4,8 @@
  */
 package printApp.util;
 
+import printApp.model.User;
+
 /**
  *
  * @author AMD
@@ -11,5 +13,11 @@ package printApp.util;
 public class Util {
     
     public static final String APP_NAME= "3D Print App";
+    public static User USER;
+    
+    
+    public static String getUser(){
+        return USER.getUserName();
+    }
     
 }

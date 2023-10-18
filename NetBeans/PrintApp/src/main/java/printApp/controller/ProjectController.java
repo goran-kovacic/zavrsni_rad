@@ -22,6 +22,7 @@ public class ProjectController extends Controller<Project> {
     @Override
     protected void controlCreate() throws PrintAppException {
         controlName();
+        appendName();
         controlDate();
     }
 
@@ -45,6 +46,19 @@ public class ProjectController extends Controller<Project> {
             throw new PrintAppException("Project name cannot be emtpy!");
         }
 
+        
+        
+        
+    }
+    
+    private void appendName(){
+        List<Project> list = session.createQuery("from Project p where p.projectName like :condition",Project.class)
+                .setParameter("condition", entitet.getProjectName()+ "%")
+                .list(); 
+        
+        if(list!=null && !list.isEmpty()){
+            entitet.setProjectName(entitet.getProjectName()+ " (" + (list.size()) + ")");
+        }
     }
 
     private void controlDate() throws PrintAppException {

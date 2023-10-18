@@ -5,17 +5,21 @@
 package printApp.util;
 
 import com.github.javafaker.Faker;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Session;
+import printApp.controller.UserController;
 import printApp.model.Material;
 import printApp.model.Part;
 import printApp.model.PrintJob;
 import printApp.model.Printer;
 import printApp.model.Project;
+import printApp.model.User;
 
 /**
  *
@@ -59,6 +63,8 @@ public class InitialInsert {
         createPrintJobs();
 
         session.getTransaction().commit();
+        
+        setPassword();
     }
 
     private void createProjects() {
@@ -146,5 +152,25 @@ public class InitialInsert {
             parts.add(p);
         }
     }
+    
+    private static void setPassword(){
+        Argon2 argon2 = Argon2Factory.create();
+        
+        String hash = argon2.hash(10, 65536, 1, "admin".toCharArray());
+        
+        UserController oo = new UserController();
+        User o = new User();
+        o.setUserName("admin");
+        o.setUserPassword(hash);
+        
+        oo.setEntitet(o);
+        
+        try {
+            oo.create();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+}
 
 }
