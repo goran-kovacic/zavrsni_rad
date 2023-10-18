@@ -29,7 +29,7 @@ public class ProjectController extends Controller<Project> {
     @Override
     protected void controlUpdate() throws PrintAppException {
         controlName();
-        controlDate();
+        controlDateUpdate();
     }
 
     @Override
@@ -44,10 +44,7 @@ public class ProjectController extends Controller<Project> {
         }
         if (entitet.getProjectName().isEmpty()) {
             throw new PrintAppException("Project name cannot be emtpy!");
-        }
-
-        
-        
+        }       
         
     }
     
@@ -66,11 +63,30 @@ public class ProjectController extends Controller<Project> {
         if (entitet.getCompletionDate() == null) {
             return;
         }
+        
+        
 
         if (entitet.getCreationDate().after(entitet.getCompletionDate())) {
             throw new PrintAppException("Completion date cannot be earlier than the creation date");
         }
+        
+        if(entitet.getCreationDate()==null && entitet.getCompletionDate()!=null){
+            throw new PrintAppException("Please enter a creation date before entering the completion date.");
+        }
 
+    }
+    
+    private void controlDateUpdate() throws PrintAppException{
+        
+        if(entitet.getCreationDate()==null ){
+            throw new PrintAppException("Date cannot be updated to null!");
+        }
+        
+        
+        if(entitet.getCreationDate().after(entitet.getCompletionDate())){
+            throw new PrintAppException("Completion date cannot be earlier than the creation date");
+        }
+        
     }
 
 }

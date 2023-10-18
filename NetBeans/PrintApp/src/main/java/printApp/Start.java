@@ -3,22 +3,15 @@
  */
 package printApp;
 
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import printApp.controller.MaterialController;
-import printApp.controller.PrinterController;
 import printApp.controller.ProjectController;
-import printApp.controller.UserController;
-import printApp.model.Material;
-import printApp.model.Printer;
 import printApp.model.Project;
-import printApp.model.User;
+import printApp.util.HibernateUtil;
+import printApp.util.InitialInsert;
 import printApp.util.PrintAppException;
-import printApp.view.Login;
 import printApp.view.SplashScreen;
 
 /**
@@ -29,15 +22,11 @@ public class Start {
 
     public static void main(String[] args) throws PrintAppException {
 
-        // HibernateUtil.getSession();
-        // new InitialInsert();
-        
+        //   HibernateUtil.getSession();
+        //    new InitialInsert();
         new SplashScreen().setVisible(true);
-            
-        
+
     }
-    
-    
 
     private static void inputDate() {
 
@@ -48,13 +37,13 @@ public class Start {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         //String dateInString = "2023-08-15";
 
-        try {            
+        try {
             p.setCreationDate(sdf.parse("2023-08-15"));
         } catch (ParseException ex) {
             Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        try {        
+        try {
             p.setCompletionDate(sdf.parse("2023-09-15"));
         } catch (ParseException ex) {
             Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);

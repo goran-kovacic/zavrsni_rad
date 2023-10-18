@@ -148,4 +148,10 @@ public class Material extends Entitet {
         this.lightOffDelay = lightOffDelay;
     }
 
+    @Override
+    public String toString() {
+    return getMaterialName(); 
+    }
+
+    
 }

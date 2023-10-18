@@ -2,6 +2,9 @@ package printApp.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -14,6 +17,8 @@ public class Printer extends Entitet {
     private String manufacturer;
     private Integer printerTime;
     private Integer fepCount;
+    @OneToMany(mappedBy = "printer")
+    private List<PrintJob> printJobs = new ArrayList<>();
 
     public Printer() {
         super();
@@ -25,6 +30,14 @@ public class Printer extends Entitet {
         this.manufacturer = manufacturer;
         this.printerTime = printerTime;
         this.fepCount = fepCount;
+    }
+
+    public List<PrintJob> getPrintJobs() {
+        return printJobs;
+    }
+
+    public void setPrintJobs(List<PrintJob> printJobs) {
+        this.printJobs = printJobs;
     }
 
     public String getPrinterName() {
@@ -58,5 +71,12 @@ public class Printer extends Entitet {
     public void setFepCount(Integer fepCount) {
         this.fepCount = fepCount;
     }
+
+    @Override
+    public String toString() {
+        return printerName;
+    }
+    
+    
 
 }

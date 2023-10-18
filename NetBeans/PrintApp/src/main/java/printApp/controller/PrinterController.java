@@ -17,7 +17,7 @@ public class PrinterController extends Controller<Printer> {
     @Override
     public List<Printer> read() {
 
-        return session.createQuery("from Priner", Printer.class).list();
+        return session.createQuery("from Printer", Printer.class).list();
 
     }
 
@@ -25,6 +25,7 @@ public class PrinterController extends Controller<Printer> {
     protected void controlCreate() throws PrintAppException {
 
         controlName();
+        appendName();
 
     }
 
@@ -55,6 +56,16 @@ public class PrinterController extends Controller<Printer> {
             throw new PrintAppException("Manufacturer name cannot be emtpy!");
         }
 
+    }
+    
+    private void appendName(){
+        List<Printer> list = session.createQuery("from Printer p where p.printerName like :condition",Printer.class)
+                .setParameter("condition", entitet.getPrinterName()+ "%")
+                .list(); 
+        
+        if(list!=null && !list.isEmpty()){
+            entitet.setPrinterName(entitet.getPrinterName()+ " (" + (list.size()) + ")");
+        }
     }
 
 }

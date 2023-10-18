@@ -72,7 +72,7 @@ public class InitialInsert {
         for (int i = 0; i < NUMBER_OF_PROJECTS; i++) {
             p = new Project();
             p.setProjectName(faker.starTrek().location());
-            p.setProjectDescription(faker.lorem().characters(50, 200));
+            p.setProjectDescription(faker.lorem().paragraph(5));
             p.setCompleted(faker.bool().bool());
 
             try {

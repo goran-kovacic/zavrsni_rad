@@ -70,6 +70,10 @@ public abstract class Controller<T extends Entitet> {
         this.entitet = entitet;
     }
     
-    
+    public void refresh(){
+        if(entitet!=null){
+            session.refresh(entitet);
+        }
+    }
     
 }
