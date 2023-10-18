@@ -102,7 +102,11 @@ public class PrinterFrame extends javax.swing.JFrame {
 
         jLabel2.setText("Manufacturer");
 
+        lblFepCount.setText("Print count:");
+
         jButton1.setText("Reset");
+
+        lblPrinterTime.setText("Printer time:");
 
         btnAdd.setText("Add");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {

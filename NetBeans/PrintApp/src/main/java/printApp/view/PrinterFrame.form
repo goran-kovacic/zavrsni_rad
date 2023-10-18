@@ -124,6 +124,9 @@
     <Component class="javax.swing.JTextField" name="txtManufacturer">
     </Component>
     <Component class="javax.swing.JLabel" name="lblFepCount">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Print count:"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="jButton1">
       <Properties>
@@ -131,6 +134,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblPrinterTime">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Printer time:"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnAdd">
       <Properties>
