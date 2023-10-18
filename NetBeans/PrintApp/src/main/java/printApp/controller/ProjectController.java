@@ -61,12 +61,12 @@ public class ProjectController extends Controller<Project> {
     private void controlDate() throws PrintAppException {
 
         if (entitet.getCompletionDate() == null) {
-            return;
+            throw new PrintAppException("message");
         }
         
         
 
-        if (entitet.getCreationDate().after(entitet.getCompletionDate())) {
+        if (entitet.getCreationDate()==null && entitet.getCreationDate().after(entitet.getCompletionDate())) {
             throw new PrintAppException("Completion date cannot be earlier than the creation date");
         }
         
@@ -82,6 +82,9 @@ public class ProjectController extends Controller<Project> {
             throw new PrintAppException("Date cannot be updated to null!");
         }
         
+        if(entitet.getCompletionDate()==null){
+            return;
+        }
         
         if(entitet.getCreationDate().after(entitet.getCompletionDate())){
             throw new PrintAppException("Completion date cannot be earlier than the creation date");

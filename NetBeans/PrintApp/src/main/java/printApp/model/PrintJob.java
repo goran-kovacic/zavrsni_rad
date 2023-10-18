@@ -91,6 +91,11 @@ public class PrintJob extends Entitet {
     public void setPrintTime(Integer printTime) {
         this.printTime = printTime;
     }
+
+    @Override
+    public String toString() {
+        return part.getPartName();
+    }
     
     
 

@@ -22,8 +22,8 @@ public class Start {
 
     public static void main(String[] args) throws PrintAppException {
 
-        //   HibernateUtil.getSession();
-        //    new InitialInsert();
+         //  HibernateUtil.getSession();
+         //   new InitialInsert();
         new SplashScreen().setVisible(true);
 
     }

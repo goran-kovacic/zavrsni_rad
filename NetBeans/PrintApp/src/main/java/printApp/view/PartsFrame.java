@@ -4,7 +4,11 @@
  */
 package printApp.view;
 
+import javax.swing.DefaultListModel;
+import printApp.controller.PartController;
+import printApp.controller.PrintJobController;
 import printApp.model.Part;
+import printApp.model.PrintJob;
 
 /**
  *
@@ -12,11 +16,25 @@ import printApp.model.Part;
  */
 public class PartsFrame extends javax.swing.JFrame {
 
+    private PartController control;
+
     /**
      * Creates new form PartsFrame
      */
     public PartsFrame() {
         initComponents();
+
+        setTitle("Print Jobs");
+        control = new PartController();
+
+        load();
+    }
+
+    private void load() {
+        DefaultListModel<Part> p = new DefaultListModel<>();
+        p.addAll(control.read());
+        lstData.setModel(p);
+        lstData.repaint();
     }
 
     /**
@@ -29,7 +47,7 @@ public class PartsFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        lstData = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -48,7 +66,7 @@ public class PartsFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(lstData);
 
         jLabel1.setText("Part name:");
 
@@ -180,7 +198,7 @@ public class PartsFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBrowseOriginalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseOriginalActionPerformed
-       new FileBrowser().setVisible(true);
+        new FileBrowser().setVisible(true);
     }//GEN-LAST:event_btnBrowseOriginalActionPerformed
 
     private void btnBrowseSupportedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseSupportedActionPerformed
@@ -188,14 +206,13 @@ public class PartsFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnBrowseSupportedActionPerformed
 
     private void btnBrowseSlicedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseSlicedActionPerformed
-       new FileBrowser().setVisible(true);
+        new FileBrowser().setVisible(true);
     }//GEN-LAST:event_btnBrowseSlicedActionPerformed
 
     private void txtOriginalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOriginalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtOriginalActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowseOriginal;
@@ -209,8 +226,8 @@ public class PartsFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JList<Part> jList1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList<Part> lstData;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtOriginal;
     private javax.swing.JTextField txtSliced;

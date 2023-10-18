@@ -358,39 +358,35 @@ public class ProjectsFrame extends javax.swing.JFrame {
 
         e.setProjectName(txtName.getText());
 
-        LocalDate ld = dpCreationDate.getDate();
-        LocalTime lt = LocalTime.now();
-        LocalDateTime ldt = LocalDateTime.of(ld, lt);
+        if (dpCreationDate.getDate() == null) {
+            e.setCreationDate(null);
+        } else {
 
-        try {
+            LocalDate ld = dpCreationDate.getDate();
+            LocalTime lt = LocalTime.now();
+            LocalDateTime ldt = LocalDateTime.of(ld, lt);
+
             e.setCreationDate(Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant()));
-        } catch (NullPointerException ex) {
 
         }
 
+        
+        if(dpCompletionDate.getDate()==null){
+            e.setCompletionDate(null);
+        }else{
+            
+        
         LocalDate ld2 = dpCompletionDate.getDate();
         LocalTime lt2 = LocalTime.now();
         LocalDateTime ldt2 = LocalDateTime.of(ld2, lt2);
 
-        try {
-            e.setCompletionDate(Date.from(ldt2.atZone(ZoneId.systemDefault()).toInstant()));
-        } catch (NullPointerException ex) {
-
-        }
-
-        /*
-        try {
-            e.setTotalPrintCount(Integer.parseInt(lblPrintCount.getText()));
-        } catch (Exception ex) {
-            e.setTotalPrintCount(null);
-        }
         
-        try {
-           e.setTotalCost(BigDecimal.valueOf(df.parse(lblTotalCost.getText()).doubleValue()));
-        } catch (Exception ex) {
-            e.setTotalCost(BigDecimal.ZERO);
+            e.setCompletionDate(Date.from(ldt2.atZone(ZoneId.systemDefault()).toInstant()));
         }
-         */
+
+        
+
+        
         e.setCompleted(chkCompleted.isSelected());
 
         e.setProjectDescription(txtDescription.getText());
