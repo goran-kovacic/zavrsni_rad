@@ -25,7 +25,6 @@ public class PartController extends Controller<Part> {
     }
 
     public List<Part> readByProject(Project selected) {
-
         
         return session.createQuery("from Part p where p.project.id = :condition", Part.class)
                 .setParameter("condition", selected.getId()).list();

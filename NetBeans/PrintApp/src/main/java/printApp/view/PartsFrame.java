@@ -348,37 +348,35 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
     private void btnBrowseOriginalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseOriginalActionPerformed
         try {
             JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(getRootPane());
-        File f = chooser.getSelectedFile();
-        String fileName = f.getAbsolutePath();
-        txtOriginal.setText(fileName);
+            chooser.showOpenDialog(getRootPane());
+            File f = chooser.getSelectedFile();
+            String fileName = f.getAbsolutePath();
+            txtOriginal.setText(fileName);
         } catch (NullPointerException e) {
         }
-
-         
 
 
     }//GEN-LAST:event_btnBrowseOriginalActionPerformed
 
 
     private void btnBrowseSupportedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseSupportedActionPerformed
-         try {
+        try {
             JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(getRootPane());
-        File f = chooser.getSelectedFile();
-        String fileName = f.getAbsolutePath();
-        txtSupported.setText(fileName);
+            chooser.showOpenDialog(getRootPane());
+            File f = chooser.getSelectedFile();
+            String fileName = f.getAbsolutePath();
+            txtSupported.setText(fileName);
         } catch (NullPointerException e) {
         }
     }//GEN-LAST:event_btnBrowseSupportedActionPerformed
 
     private void btnBrowseSlicedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseSlicedActionPerformed
-       try {
+        try {
             JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(getRootPane());
-        File f = chooser.getSelectedFile();
-        String fileName = f.getAbsolutePath();
-        txtSliced.setText(fileName);
+            chooser.showOpenDialog(getRootPane());
+            File f = chooser.getSelectedFile();
+            String fileName = f.getAbsolutePath();
+            txtSliced.setText(fileName);
         } catch (NullPointerException e) {
         }
     }//GEN-LAST:event_btnBrowseSlicedActionPerformed
@@ -471,13 +469,7 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
             lstData.repaint();
         } else {
             DefaultListModel<Part> p = new DefaultListModel<>();
-            
-    
-            
-            p.addAll(control.readByProject((Project)cmbShowByProject.getSelectedItem()));
-
-            
-
+            p.addAll(control.readByProject((Project) cmbShowByProject.getSelectedItem()));
             lstData.setModel(p);
             lstData.repaint();
         }
