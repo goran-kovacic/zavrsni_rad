@@ -18,7 +18,7 @@ import printApp.util.PrintAppException;
  *
  * @author AMD
  */
-public class MaterialFrame extends javax.swing.JFrame {
+public class MaterialFrame extends javax.swing.JFrame implements ViewInterface{
 
     private MaterialController control;
     private DecimalFormat df;
@@ -39,7 +39,8 @@ public class MaterialFrame extends javax.swing.JFrame {
 
     }
 
-    private void load() {
+    @Override
+    public void load() {
         DefaultListModel<Material> m = new DefaultListModel<>();
         m.addAll(control.read());
         lstData.setModel(m);
@@ -47,14 +48,27 @@ public class MaterialFrame extends javax.swing.JFrame {
 
     }
 
-    private void fillModel() {
+    @Override
+    public void fillModel() {
         var e = control.getEntitet();
         e.setMaterialName(txtName.getText());
         e.setManufacturer(txtManufacturer.getText());
-        //e.setLayerHeight(txtLayerHeight.);
+       
+        if(txtLayerHeight.getText()==null){
+            e.setLayerHeight(BigDecimal.ZERO);
+        }else{
+            e.setLayerHeight(BigDecimal.valueOf(Double.parseDouble(txtLayerHeight.getText())));
+        }
+        if(txtLiftDistance.getText()==null){
+            e.setLiftDistance(0);
+        }else{
+            e.setLiftDistance(Integer.valueOf(txtLiftDistance.getText()));
+        }
+        
     }
 
-    private void fillView() {
+    @Override
+    public void fillView() {
 
         var e = control.getEntitet();
 
@@ -67,20 +81,62 @@ public class MaterialFrame extends javax.swing.JFrame {
             txtLayerHeight.setText(df.format(0));
         }
         
+        try {
+            txtLiftDistance.setText(df.format(e.getLiftDistance()));
+        } catch (Exception ex) {
+            txtLiftDistance.setText(df.format(0));
+        }
+        
+        try {
+            txtLiftSpeed.setText(df.format(e.getLiftSpeed()));
+        } catch (Exception ex) {
+            txtLiftSpeed.setText(df.format(0));
+        }
+        
+        try {
+            txtLightOffDelay.setText(df.format(e.getLightOffDelay()));
+        } catch (Exception ex) {
+            txtLightOffDelay.setText(df.format(0));
+        }
+        
+         try {
+            txtRetractSpeed.setText(df.format(e.getRetractSpeed()));
+        } catch (Exception ex) {
+            txtRetractSpeed.setText(df.format(0));
+        }
+        
+         try {
+            txtCalibratedExposure.setText(df.format(e.getCalibratedExposure()));
+        } catch (Exception ex) {
+            txtCalibratedExposure.setText(df.format(0));
+        }
+         try {
+            txtBottomExposure.setText(df.format(e.getBottomExposure()));
+        } catch (Exception ex) {
+            txtBottomExposure.setText(df.format(0));
+        }
+         try {
+            txtBottomLiftDistance.setText(df.format(e.getBottomLiftDistance()));
+        } catch (Exception ex) {
+            txtBottomLiftDistance.setText(df.format(0));
+        }
+          try {
+            txtBottomLiftSpeed.setText(df.format(e.getBottomLiftSpeed()));
+        } catch (Exception ex) {
+            txtBottomLiftSpeed.setText(df.format(0));
+        }
+          try {
+            txtBottomRetractSpeed.setText(df.format(e.getBottomRetractSpeed()));
+        } catch (Exception ex) {
+            txtBottomRetractSpeed.setText(df.format(0));
+        }
+          try {
+            txtCost.setText(df.format(e.getCostPerUnit()));
+        } catch (Exception ex) {
+            txtCost.setText(df.format(0));
+        }
         
         
-        
-        
-        txtLiftDistance.setText(e.getLiftDistance().toString());
-        txtLiftSpeed.setText(e.getLiftSpeed().toString());
-        txtLightOffDelay.setText(e.getLightOffDelay().toString());
-        txtRetractSpeed.setText(e.getRetractSpeed().toString());
-        txtCalibratedExposure.setText(e.getCalibratedExposure().toString());
-        txtBottomExposure.setText(e.getBottomExposure().toString());
-        txtBottomLiftDistance.setText(e.getBottomLiftDistance().toString());
-        txtBottomLiftSpeed.setText(e.getBottomLiftSpeed().toString());
-        txtBottomRetractSpeed.setText(e.getBottomRetractSpeed().toString());
-        txtCost.setText(e.getCostPerUnit().toString());
     }
 
     /**

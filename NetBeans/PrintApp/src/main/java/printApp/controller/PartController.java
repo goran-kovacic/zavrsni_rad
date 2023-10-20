@@ -23,14 +23,12 @@ public class PartController extends Controller<Part> {
     public List<Part> read() {
         return session.createQuery("from Part", Part.class).list();
     }
-    
-    public List<Part> readByProject(int selected){
+
+    public List<Part> readByProject(Project selected) {
 
         
-        
-        return session.createQuery("from Part p where p.project.id = :selected", Part.class)
-                .setParameter("selected", selected).list();
-
+        return session.createQuery("from Part p where p.project.id = :condition", Part.class)
+                .setParameter("condition", selected.getId()).list();
 
     }
 
@@ -67,8 +65,8 @@ public class PartController extends Controller<Part> {
     }
 
     private void controlStlOriginal() throws PrintAppException {
-        
-        if(entitet.getStlOriginal()==null){
+
+        if (entitet.getStlOriginal() == null) {
             return;
         }
 
@@ -84,11 +82,11 @@ public class PartController extends Controller<Part> {
     }
 
     private void controlStlSupported() throws PrintAppException {
-        
-        if(entitet.getStlSupported()==null){
+
+        if (entitet.getStlSupported() == null) {
             return;
         }
-        
+
         try {
             Path p = Paths.get(entitet.getStlSupported());
 
@@ -100,8 +98,8 @@ public class PartController extends Controller<Part> {
     }
 
     private void controlSlicedFile() throws PrintAppException {
-        
-        if(entitet.getSlicedFile()==null){
+
+        if (entitet.getSlicedFile() == null) {
             return;
         }
 

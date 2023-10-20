@@ -23,6 +23,11 @@ public class Project extends Entitet{
 	private BigDecimal totalCost;
 	private String projectDescription;
 
+//        public Project(Integer id, String projectName){
+//            super(id);
+//            this.projectName=projectName;
+//        }
+        
     public Project(Integer id, String projectName, Date creationDate, Date completionDate, boolean isCompleted, Integer totalPrintTime, Integer totalPrintCount, BigDecimal totalCost, String projectDescription) {
         super(id);
         this.projectName = projectName;

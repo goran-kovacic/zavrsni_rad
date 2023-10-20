@@ -4,12 +4,18 @@
  */
 package printApp.view;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.ComboBoxUI;
 import printApp.controller.PartController;
 import printApp.controller.ProjectController;
 import printApp.model.Part;
@@ -24,15 +30,12 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
 
     private PartController control;
     private DecimalFormat df;
-  
 
     /**
      * Creates new form PartsFrame
      */
     public PartsFrame() {
         initComponents();
-
-       
 
         DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.of("en", "EN"));
         df = new DecimalFormat("###,##0.00", dfs);
@@ -343,15 +346,41 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBrowseOriginalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseOriginalActionPerformed
-        new FileBrowser().setVisible(true);
+        try {
+            JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(getRootPane());
+        File f = chooser.getSelectedFile();
+        String fileName = f.getAbsolutePath();
+        txtOriginal.setText(fileName);
+        } catch (NullPointerException e) {
+        }
+
+         
+
+
     }//GEN-LAST:event_btnBrowseOriginalActionPerformed
 
+
     private void btnBrowseSupportedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseSupportedActionPerformed
-        new FileBrowser().setVisible(true);
+         try {
+            JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(getRootPane());
+        File f = chooser.getSelectedFile();
+        String fileName = f.getAbsolutePath();
+        txtSupported.setText(fileName);
+        } catch (NullPointerException e) {
+        }
     }//GEN-LAST:event_btnBrowseSupportedActionPerformed
 
     private void btnBrowseSlicedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseSlicedActionPerformed
-        new FileBrowser().setVisible(true);
+       try {
+            JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(getRootPane());
+        File f = chooser.getSelectedFile();
+        String fileName = f.getAbsolutePath();
+        txtSliced.setText(fileName);
+        } catch (NullPointerException e) {
+        }
     }//GEN-LAST:event_btnBrowseSlicedActionPerformed
 
     private void txtOriginalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOriginalActionPerformed
@@ -435,20 +464,25 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
 
     private void cmbShowByProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbShowByProjectActionPerformed
 
-        if(cmbShowByProject.getSelectedIndex()==0){
+        if (cmbShowByProject.getSelectedIndex() == 0) {
             DefaultListModel<Part> p = new DefaultListModel<>();
-        p.addAll(control.read());
-        lstData.setModel(p);
-        lstData.repaint();
-        }else{
+            p.addAll(control.read());
+            lstData.setModel(p);
+            lstData.repaint();
+        } else {
             DefaultListModel<Part> p = new DefaultListModel<>();
-        p.addAll(control.readByProject(cmbShowByProject.getSelectedIndex()));
-        lstData.setModel(p);
-        lstData.repaint();
+            
+    
+            
+            p.addAll(control.readByProject((Project)cmbShowByProject.getSelectedItem()));
+
+            
+
+            lstData.setModel(p);
+            lstData.repaint();
         }
-        
-        
-        
+
+
     }//GEN-LAST:event_cmbShowByProjectActionPerformed
 
 
