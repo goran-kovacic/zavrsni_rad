@@ -5,6 +5,7 @@
 package printApp.controller;
 
 import java.util.List;
+import javax.swing.JOptionPane;
 import printApp.model.Project;
 import printApp.util.PrintAppException;
 
@@ -17,6 +18,10 @@ public class ProjectController extends Controller<Project> {
     @Override
     public List<Project> read() {
         return session.createQuery("from Project", Project.class).list();
+    }
+    
+    public List<Project> readByCompleted() {
+        return session.createQuery("from Project where isCompleted = false", Project.class).list();
     }
 
     @Override
@@ -44,52 +49,50 @@ public class ProjectController extends Controller<Project> {
         }
         if (entitet.getProjectName().isEmpty()) {
             throw new PrintAppException("Project name cannot be emtpy!");
-        }       
-        
+        }
+
     }
-    
-    private void appendName(){
-        List<Project> list = session.createQuery("from Project p where p.projectName like :condition",Project.class)
-                .setParameter("condition", entitet.getProjectName()+ "%")
-                .list(); 
-        
-        if(list!=null && !list.isEmpty()){
-            entitet.setProjectName(entitet.getProjectName()+ " (" + (list.size()) + ")");
+
+    private void appendName() {
+        List<Project> list = session.createQuery("from Project p where p.projectName like :condition", Project.class)
+                .setParameter("condition", entitet.getProjectName() + "%")
+                .list();
+
+        if (list != null && !list.isEmpty()) {
+            entitet.setProjectName(entitet.getProjectName() + " (" + (list.size()) + ")");
         }
     }
 
     private void controlDate() throws PrintAppException {
 
-        if (entitet.getCompletionDate() == null) {
-            throw new PrintAppException("message");
-        }
-        
-        
+        try {
+            if (entitet.getCreationDate().after(entitet.getCompletionDate())) {
+                throw new PrintAppException("Completion date cannot be earlier than the creation date");
+            }
+        } catch (NullPointerException e) {
 
-        if (entitet.getCreationDate()==null && entitet.getCreationDate().after(entitet.getCompletionDate())) {
-            throw new PrintAppException("Completion date cannot be earlier than the creation date");
         }
-        
-        if(entitet.getCreationDate()==null && entitet.getCompletionDate()!=null){
+
+        if (entitet.getCreationDate() == null && entitet.getCompletionDate() != null) {
             throw new PrintAppException("Please enter a creation date before entering the completion date.");
         }
 
     }
-    
-    private void controlDateUpdate() throws PrintAppException{
-        
-        if(entitet.getCreationDate()==null ){
-            throw new PrintAppException("Date cannot be updated to null!");
+
+    private void controlDateUpdate() throws PrintAppException {
+
+        if (entitet.getCreationDate() == null) {
+            throw new PrintAppException("Creation date cannot be updated to null!");
         }
-        
-        if(entitet.getCompletionDate()==null){
+
+        if (entitet.getCompletionDate() == null) {
             return;
         }
-        
-        if(entitet.getCreationDate().after(entitet.getCompletionDate())){
+
+        if (entitet.getCreationDate().after(entitet.getCompletionDate())) {
             throw new PrintAppException("Completion date cannot be earlier than the creation date");
         }
-        
+
     }
 
 }

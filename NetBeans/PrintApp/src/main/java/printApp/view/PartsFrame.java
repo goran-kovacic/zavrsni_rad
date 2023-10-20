@@ -4,19 +4,27 @@
  */
 package printApp.view;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import printApp.controller.PartController;
-import printApp.controller.PrintJobController;
+import printApp.controller.ProjectController;
 import printApp.model.Part;
-import printApp.model.PrintJob;
+import printApp.model.Project;
+import printApp.util.PrintAppException;
 
 /**
  *
  * @author AMD
  */
-public class PartsFrame extends javax.swing.JFrame {
+public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
 
     private PartController control;
+    private DecimalFormat df;
+  
 
     /**
      * Creates new form PartsFrame
@@ -24,17 +32,96 @@ public class PartsFrame extends javax.swing.JFrame {
     public PartsFrame() {
         initComponents();
 
-        setTitle("Print Jobs");
+       
+
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.of("en", "EN"));
+        df = new DecimalFormat("###,##0.00", dfs);
+
+        setTitle("Parts");
         control = new PartController();
+
+        loadProjects();
+        loadShowByProject();
 
         load();
     }
 
-    private void load() {
+    @Override
+    public void load() {
         DefaultListModel<Part> p = new DefaultListModel<>();
         p.addAll(control.read());
         lstData.setModel(p);
         lstData.repaint();
+    }
+
+    @Override
+    public void fillModel() {
+
+        var e = control.getEntitet();
+        e.setPartName(txtName.getText());
+        e.setProject((Project) cmbProject.getSelectedItem());
+
+        if (txtOriginal.getText().isBlank()) {
+            e.setStlOriginal(null);
+        } else {
+            e.setStlOriginal(txtOriginal.getText());
+        }
+
+        if (txtSupported.getText().isBlank()) {
+            e.setStlSupported(null);
+        } else {
+            e.setStlSupported(txtSupported.getText());
+        }
+
+        if (txtSliced.getText().isBlank()) {
+            e.setSlicedFile(null);
+        } else {
+            e.setSlicedFile(txtSliced.getText());
+        }
+
+    }
+
+    @Override
+    public void fillView() {
+
+        var e = control.getEntitet();
+
+        txtName.setText(e.getPartName());
+
+        cmbProject.setSelectedItem(e.getProject());
+
+        txtOriginal.setText(e.getStlOriginal());
+        txtSupported.setText(e.getStlSupported());
+        txtSliced.setText(e.getSlicedFile());
+
+    }
+
+    private void loadProjects() {
+
+        DefaultComboBoxModel<Project> m = new DefaultComboBoxModel<>();
+
+        Project p = new Project();
+        p.setId(0);
+        p.setProjectName("Select project");
+        m.addElement(p);
+        m.addAll(new ProjectController().read());
+
+        cmbProject.setModel(m);
+        cmbProject.repaint();
+
+    }
+
+    private void loadShowByProject() {
+        DefaultComboBoxModel<Project> m = new DefaultComboBoxModel<>();
+
+        Project p = new Project();
+        p.setId(0);
+        p.setProjectName("All projects");
+        m.addElement(p);
+        m.addAll(new ProjectController().read());
+
+        cmbShowByProject.setModel(m);
+        cmbShowByProject.repaint();
     }
 
     /**
@@ -51,7 +138,7 @@ public class PartsFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbProject = new javax.swing.JComboBox<>();
         btnBrowseOriginal = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtOriginal = new javax.swing.JTextField();
@@ -63,16 +150,29 @@ public class PartsFrame extends javax.swing.JFrame {
         txtSliced = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        btnAdd = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        cmbShowByProject = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        lstData.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstDataValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(lstData);
 
         jLabel1.setText("Part name:");
 
-        jLabel2.setText("Project:");
+        jLabel2.setText("Assigned to project:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbProject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbProjectActionPerformed(evt);
+            }
+        });
 
         btnBrowseOriginal.setText("Browse");
         btnBrowseOriginal.addActionListener(new java.awt.event.ActionListener() {
@@ -111,6 +211,33 @@ public class PartsFrame extends javax.swing.JFrame {
 
         jLabel7.setText("Cost: ");
 
+        btnAdd.setText("Add");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        btnEdit.setText("Edit");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        cmbShowByProject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbShowByProjectActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,7 +249,9 @@ public class PartsFrame extends javax.swing.JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnBrowseSupported))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cmbShowByProject, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -148,26 +277,34 @@ public class PartsFrame extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel2)
-                                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                            .addComponent(cmbProject, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnAdd)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnDelete)))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(25, 25, 25))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLabel2)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(cmbShowByProject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cmbProject, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
@@ -190,7 +327,15 @@ public class PartsFrame extends javax.swing.JFrame {
                         .addComponent(jLabel6)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel7)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAdd)
+                            .addComponent(btnEdit)
+                            .addComponent(btnDelete))
+                        .addGap(0, 33, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())))
         );
 
         pack();
@@ -213,12 +358,109 @@ public class PartsFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtOriginalActionPerformed
 
+    private void lstDataValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstDataValueChanged
+
+        if (evt.getValueIsAdjusting()) {
+            return;
+        }
+
+        if (lstData.getSelectedValue() == null) {
+            return;
+        }
+
+        control.setEntitet(lstData.getSelectedValue());
+
+        fillView();
+
+    }//GEN-LAST:event_lstDataValueChanged
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+
+        control.setEntitet(new Part());
+        fillModel();
+        try {
+            control.create();
+            load();
+        } catch (PrintAppException ex) {
+            JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
+        }
+
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+
+        if (lstData.getSelectedValue() == null) {
+            return;
+        }
+
+        var e = lstData.getSelectedValue();
+        control.setEntitet(e);
+
+        fillModel();
+        try {
+            control.update();
+            load();
+        } catch (PrintAppException ex) {
+            JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
+        }
+
+        control.refresh();
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        if (lstData.getSelectedValue() == null) {
+            return;
+        }
+
+        var e = lstData.getSelectedValue();
+
+        if (JOptionPane.showConfirmDialog(getRootPane(),
+                "Are you sure you want to delete part: \n\n" + e.getPartName(),
+                "Delete part?",
+                JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+            control.delete();
+            load();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void cmbProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProjectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbProjectActionPerformed
+
+    private void cmbShowByProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbShowByProjectActionPerformed
+
+        if(cmbShowByProject.getSelectedIndex()==0){
+            DefaultListModel<Part> p = new DefaultListModel<>();
+        p.addAll(control.read());
+        lstData.setModel(p);
+        lstData.repaint();
+        }else{
+            DefaultListModel<Part> p = new DefaultListModel<>();
+        p.addAll(control.readByProject(cmbShowByProject.getSelectedIndex()));
+        lstData.setModel(p);
+        lstData.repaint();
+        }
+        
+        
+        
+    }//GEN-LAST:event_cmbShowByProjectActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnBrowseOriginal;
     private javax.swing.JButton btnBrowseSliced;
     private javax.swing.JButton btnBrowseSupported;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JComboBox<Project> cmbProject;
+    private javax.swing.JComboBox<Project> cmbShowByProject;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -233,4 +475,5 @@ public class PartsFrame extends javax.swing.JFrame {
     private javax.swing.JTextField txtSliced;
     private javax.swing.JTextField txtSupported;
     // End of variables declaration//GEN-END:variables
+
 }

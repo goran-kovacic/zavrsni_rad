@@ -13,20 +13,19 @@ import printApp.util.PrintAppException;
  * @author AMD
  */
 public class PrintJobController extends Controller<PrintJob> {
-    
+
     @Override
-     public void create() throws PrintAppException{
+    public void create() throws PrintAppException {
         super.create();
-        entitet.getPrinter().setFepCount(entitet.getPrinter().getFepCount()+1);
-        
+        entitet.getPrinter().setFepCount(entitet.getPrinter().getFepCount() + 1);
+
         PrinterController pc = new PrinterController();
         pc.setEntitet(entitet.getPrinter());
         try {
             pc.update();
         } catch (Exception e) {
         }
-        
-        
+
     }
 
     @Override

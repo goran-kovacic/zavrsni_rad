@@ -19,12 +19,13 @@ import javax.swing.JOptionPane;
 import printApp.controller.ProjectController;
 import printApp.model.Project;
 import printApp.util.PrintAppException;
+import printApp.util.Util;
 
 /**
  *
  * @author AMD
  */
-public class ProjectsFrame extends javax.swing.JFrame {
+public class ProjectsFrame extends javax.swing.JFrame implements ViewInterface {
 
     private ProjectController control;
     private DecimalFormat df;
@@ -38,7 +39,7 @@ public class ProjectsFrame extends javax.swing.JFrame {
         DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.of("en", "EN"));
         df = new DecimalFormat("###,##0.00", dfs);
 
-        setTitle("Projects");
+        setTitle(Util.APP_NAME + " | Projects");
         control = new ProjectController();
 
         inputCreationDate();
@@ -64,11 +65,84 @@ public class ProjectsFrame extends javax.swing.JFrame {
 
     }
 
-    private void load() {
+    @Override
+    public void load() {
         DefaultListModel<Project> p = new DefaultListModel<>();
         p.addAll(control.read());
         lstData.setModel(p);
         lstData.repaint();
+    }
+
+    @Override
+    public void fillView() {
+
+        var e = control.getEntitet();
+
+        txtName.setText(e.getProjectName());
+        chkCompleted.setSelected(e.isCompleted());
+
+        txtDescription.setText(e.getProjectDescription());
+
+        if (e.getCreationDate() == null) {
+            dpCreationDate.setDate(null);
+        } else {
+            LocalDate ld = e.getCreationDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            dpCreationDate.setDate(ld);
+        }
+
+        if (e.getCompletionDate() == null) {
+            dpCompletionDate.setDate(null);
+        } else {
+            LocalDate ld = e.getCompletionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            dpCompletionDate.setDate(ld);
+        }
+
+        try {
+            lblTotalCost.setText(df.format(e.getTotalCost()));
+        } catch (Exception ex) {
+            lblTotalCost.setText(df.format(0));
+        }
+
+        lblPrintTime.setText(String.valueOf(e.getTotalPrintTime() != null ? (e.getTotalPrintTime()) : "0"));
+
+        lblPrintCount.setText(String.valueOf(e.getTotalPrintCount() == null ? "0" : e.getTotalPrintCount()));
+
+    }
+
+    @Override
+    public void fillModel() {
+
+        var e = control.getEntitet();
+
+        e.setProjectName(txtName.getText());
+
+        if (dpCreationDate.getDate() == null) {
+            e.setCreationDate(null);
+        } else {
+
+            LocalDate ld = dpCreationDate.getDate();
+            LocalTime lt = LocalTime.now();
+            LocalDateTime ldt = LocalDateTime.of(ld, lt);
+
+            e.setCreationDate(Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant()));
+
+        }
+
+        if (dpCompletionDate.getDate() == null) {
+            e.setCompletionDate(null);
+        } else {
+
+            LocalDate ld2 = dpCompletionDate.getDate();
+            LocalTime lt2 = LocalTime.now();
+            LocalDateTime ldt2 = LocalDateTime.of(ld2, lt2);
+
+            e.setCompletionDate(Date.from(ldt2.atZone(ZoneId.systemDefault()).toInstant()));
+        }
+
+        e.setCompleted(chkCompleted.isSelected());
+
+        e.setProjectDescription(txtDescription.getText());
+
     }
 
     /**
@@ -103,6 +177,7 @@ public class ProjectsFrame extends javax.swing.JFrame {
         dpCreationDate = new com.github.lgooddatepicker.components.DatePicker();
         jLabel9 = new javax.swing.JLabel();
         dpCompletionDate = new com.github.lgooddatepicker.components.DatePicker();
+        tglCompleted = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -169,13 +244,22 @@ public class ProjectsFrame extends javax.swing.JFrame {
 
         jLabel9.setText("Completion date");
 
+        tglCompleted.setText("Show unfinished / Show all");
+        tglCompleted.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tglCompletedActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                    .addComponent(tglCompleted, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -227,15 +311,15 @@ public class ProjectsFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chkCompleted)
+                    .addComponent(tglCompleted))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(chkCompleted))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -258,7 +342,7 @@ public class ProjectsFrame extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(dpCompletionDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAdd)
                             .addComponent(btnEdit)
@@ -266,7 +350,8 @@ public class ProjectsFrame extends javax.swing.JFrame {
                         .addGap(58, 58, 58)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
 
@@ -352,81 +437,19 @@ public class ProjectsFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnEditActionPerformed
 
-    private void fillModel() {
-
-        var e = control.getEntitet();
-
-        e.setProjectName(txtName.getText());
-
-        if (dpCreationDate.getDate() == null) {
-            e.setCreationDate(null);
+    private void tglCompletedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tglCompletedActionPerformed
+        if (tglCompleted.isSelected()) {
+            DefaultListModel<Project> p = new DefaultListModel<>();
+            p.addAll(control.readByCompleted());
+            lstData.setModel(p);
+            lstData.repaint();
         } else {
-
-            LocalDate ld = dpCreationDate.getDate();
-            LocalTime lt = LocalTime.now();
-            LocalDateTime ldt = LocalDateTime.of(ld, lt);
-
-            e.setCreationDate(Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant()));
-
+            load();
         }
 
-        
-        if(dpCompletionDate.getDate()==null){
-            e.setCompletionDate(null);
-        }else{
-            
-        
-        LocalDate ld2 = dpCompletionDate.getDate();
-        LocalTime lt2 = LocalTime.now();
-        LocalDateTime ldt2 = LocalDateTime.of(ld2, lt2);
 
-        
-            e.setCompletionDate(Date.from(ldt2.atZone(ZoneId.systemDefault()).toInstant()));
-        }
+    }//GEN-LAST:event_tglCompletedActionPerformed
 
-        
-
-        
-        e.setCompleted(chkCompleted.isSelected());
-
-        e.setProjectDescription(txtDescription.getText());
-
-    }
-
-    private void fillView() {
-
-        var e = control.getEntitet();
-
-        txtName.setText(e.getProjectName());
-        chkCompleted.setSelected(e.isCompleted());
-
-        txtDescription.setText(e.getProjectDescription());
-
-        if (e.getCreationDate() == null) {
-            dpCreationDate.setDate(null);
-        } else {
-            LocalDate ld = e.getCreationDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            dpCreationDate.setDate(ld);
-        }
-
-        if (e.getCompletionDate() == null) {
-            dpCompletionDate.setDate(null);
-        } else {
-            LocalDate ld = e.getCompletionDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            dpCompletionDate.setDate(ld);
-        }
-
-        try {
-            lblTotalCost.setText(df.format(e.getTotalCost()));
-        } catch (Exception ex) {
-            lblTotalCost.setText(df.format(0));
-        }
-
-        lblPrintTime.setText(String.valueOf(e.getTotalPrintTime() != null ? (e.getTotalPrintTime()) : "0"));
-
-        lblPrintCount.setText(String.valueOf(e.getTotalPrintCount() == null ? "0" : e.getTotalPrintCount()));
-
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -450,6 +473,7 @@ public class ProjectsFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblPrintTime;
     private javax.swing.JLabel lblTotalCost;
     private javax.swing.JList<Project> lstData;
+    private javax.swing.JToggleButton tglCompleted;
     private javax.swing.JTextPane txtDescription;
     private javax.swing.JTextField txtName;
     // End of variables declaration//GEN-END:variables

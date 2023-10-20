@@ -11,6 +11,7 @@ import printApp.util.PrintAppException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import printApp.model.Project;
 
 /**
  *
@@ -21,6 +22,16 @@ public class PartController extends Controller<Part> {
     @Override
     public List<Part> read() {
         return session.createQuery("from Part", Part.class).list();
+    }
+    
+    public List<Part> readByProject(int selected){
+
+        
+        
+        return session.createQuery("from Part p where p.project.id = :selected", Part.class)
+                .setParameter("selected", selected).list();
+
+
     }
 
     @Override
@@ -56,6 +67,10 @@ public class PartController extends Controller<Part> {
     }
 
     private void controlStlOriginal() throws PrintAppException {
+        
+        if(entitet.getStlOriginal()==null){
+            return;
+        }
 
         try {
             Path p = Paths.get(entitet.getStlOriginal());
@@ -69,6 +84,11 @@ public class PartController extends Controller<Part> {
     }
 
     private void controlStlSupported() throws PrintAppException {
+        
+        if(entitet.getStlSupported()==null){
+            return;
+        }
+        
         try {
             Path p = Paths.get(entitet.getStlSupported());
 
@@ -80,6 +100,10 @@ public class PartController extends Controller<Part> {
     }
 
     private void controlSlicedFile() throws PrintAppException {
+        
+        if(entitet.getSlicedFile()==null){
+            return;
+        }
 
         try {
             Path p = Paths.get(entitet.getSlicedFile());
