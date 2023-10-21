@@ -21,6 +21,7 @@ import printApp.controller.ProjectController;
 import printApp.model.Part;
 import printApp.model.Project;
 import printApp.util.PrintAppException;
+import printApp.util.Util;
 
 /**
  *
@@ -40,7 +41,7 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
         DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.of("en", "EN"));
         df = new DecimalFormat("###,##0.00", dfs);
 
-        setTitle("Parts");
+        setTitle(Util.APP_NAME + " | Parts");
         control = new PartController();
 
         loadProjects();
@@ -361,7 +362,7 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
 
     private void btnBrowseSupportedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseSupportedActionPerformed
         try {
-            JFileChooser chooser = new JFileChooser();
+            JFileChooser chooser = new JFileChooser();            
             chooser.showOpenDialog(getRootPane());
             File f = chooser.getSelectedFile();
             String fileName = f.getAbsolutePath();

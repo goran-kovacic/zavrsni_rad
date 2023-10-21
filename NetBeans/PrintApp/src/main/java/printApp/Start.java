@@ -7,9 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.hibernate.Session;
 import printApp.controller.ProjectController;
-import printApp.model.Part;
 import printApp.model.Project;
 import printApp.util.HibernateUtil;
 import printApp.util.InitialInsert;
@@ -22,19 +20,11 @@ import printApp.view.SplashScreen;
  */
 public class Start {
 
-    
-    
-    
-
     public static void main(String[] args) throws PrintAppException {
 
-         //  HibernateUtil.getSession();
-         //   new InitialInsert();
+//        HibernateUtil.getSession();
+//        new InitialInsert();
         new SplashScreen().setVisible(true);
-        
-       
-        
-        
 
     }
 

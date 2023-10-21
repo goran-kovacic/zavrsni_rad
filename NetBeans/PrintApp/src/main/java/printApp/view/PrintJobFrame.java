@@ -4,20 +4,32 @@
  */
 package printApp.view;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import printApp.controller.MaterialController;
+import printApp.controller.PartController;
 import printApp.controller.PrintJobController;
+import printApp.controller.PrinterController;
+import printApp.model.Material;
+import printApp.model.Part;
 import printApp.model.PrintJob;
+import printApp.model.Printer;
 import printApp.util.PrintAppException;
+import printApp.util.Util;
 
 /**
  *
  * @author AMD
  */
-public class PrintJobFrame extends javax.swing.JFrame {
-    
+public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface{
+
     private PrintJobController control;
-    
+    private DecimalFormat df;
 
     /**
      * Creates new form PrintJobFrame
@@ -25,28 +37,120 @@ public class PrintJobFrame extends javax.swing.JFrame {
     public PrintJobFrame() {
         initComponents();
         
-        setTitle("Print Jobs");
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.of("en", "EN"));
+        df = new DecimalFormat("###,##0.00", dfs);
+
+        setTitle(Util.APP_NAME + " | Print Jobs");
         control = new PrintJobController();
+        
+        loadParts();
+        loadPrinters();
+        loadMaterials();
+        
         load();
+
+    }
+    
+    private void loadMaterials(){
+        
+        DefaultComboBoxModel<Material> m = new DefaultComboBoxModel<>();
+
+        Material p = new Material();
+        p.setId(0);
+        p.setMaterialName("Select resin");
+        m.addElement(p);
+        m.addAll(new MaterialController().read());
+
+        cmbMaterials.setModel(m);
+        cmbMaterials.repaint();
+        
+    }
+    
+   private void loadPrinters(){
+       DefaultComboBoxModel<Printer> m = new DefaultComboBoxModel<>();
+
+        Printer p = new Printer();
+        p.setId(0);
+        p.setPrinterName("Select printer");
+        m.addElement(p);
+        m.addAll(new PrinterController().read());
+
+        cmbPrinters.setModel(m);
+        cmbPrinters.repaint();
+   }
+    
+    private void loadParts() {
+
+        DefaultComboBoxModel<Part> m = new DefaultComboBoxModel<>();
+
+        Part p = new Part();
+        p.setId(0);
+        p.setPartName("Select part");
+        m.addElement(p);
+        m.addAll(new PartController().read());
+
+        cmbParts.setModel(m);
+        cmbParts.repaint();
         
     }
 
-    private void load(){
-        
+    @Override
+    public void load() {
+
         DefaultListModel<PrintJob> p = new DefaultListModel<>();
         p.addAll(control.read());
         lstData.setModel(p);
         lstData.repaint();
-        
+
     }
     
-    private void fillModel(){
+    @Override
+    public void fillView(){
         
         var e = control.getEntitet();
         
+        cmbPrinters.setSelectedItem(e.getPrinter());
+        cmbParts.setSelectedItem(control.getEntitet().getPart());
+        cmbMaterials.setSelectedItem(e.getMaterial());
+        
+        try {
+            txtVolume.setText(df.format(e.getVolume()));
+        } catch (Exception ex) {
+            txtVolume.setText(df.format(0));
+        }
+               
+        chkResult.setSelected(e.isResult());
+        
+        txtTime.setText(String.valueOf(e.getPrintTime()));
+        
+        BigDecimal cpu =  e.getMaterial().getCostPerUnit();
+        
+        BigDecimal volume = e.getVolume().divide(BigDecimal.valueOf(1000));
+        
+        BigDecimal result = cpu.multiply(volume);
+        
+        try {
+            lblCost.setText("Cost: " + df.format(result) + " €");
+                   
+        } catch (Exception ex) {
+            lblCost.setText(df.format(0));
+        }
+        
+        
+        
+        
         
     }
-    
+
+    @Override
+    public void fillModel() {
+
+        var e = control.getEntitet();
+        
+        
+
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -59,11 +163,11 @@ public class PrintJobFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         lstData = new javax.swing.JList<>();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cmbParts = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cmbPrinters = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        cmbMaterials = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         txtVolume = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -78,19 +182,24 @@ public class PrintJobFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        lstData.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                lstDataValueChanged(evt);
+            }
+        });
         jScrollPane1.setViewportView(lstData);
 
         jLabel1.setText("Part:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel2.setText("Printer:");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel3.setText("Resin:");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbMaterials.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbMaterialsActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Volume");
 
@@ -137,11 +246,11 @@ public class PrintJobFrame extends javax.swing.JFrame {
                     .addComponent(jLabel4)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel1)
-                        .addComponent(jComboBox1, 0, 121, Short.MAX_VALUE)
+                        .addComponent(cmbParts, 0, 121, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addComponent(jLabel3)
-                        .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(cmbPrinters, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cmbMaterials, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jLabel6)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -171,15 +280,15 @@ public class PrintJobFrame extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbParts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cmbMaterials, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -250,9 +359,9 @@ public class PrintJobFrame extends javax.swing.JFrame {
         var e = lstData.getSelectedValue();
 
         if (JOptionPane.showConfirmDialog(getRootPane(),
-            "Are you sure you want to delete this print job ", "Delete print job?",
-            JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
-        return;
+                "Are you sure you want to delete this print job ", "Delete print job?",
+                JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+            return;
         }
 
         try {
@@ -263,16 +372,31 @@ public class PrintJobFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
-    
+    private void cmbMaterialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbMaterialsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbMaterialsActionPerformed
+
+    private void lstDataValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstDataValueChanged
+        if(evt.getValueIsAdjusting()){
+            return;
+        }
+        if(lstData.getSelectedValue()==null){
+            return;
+        }
+        control.setEntitet(lstData.getSelectedValue());
+        
+        fillView();
+    }//GEN-LAST:event_lstDataValueChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.JCheckBox chkResult;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JComboBox<Material> cmbMaterials;
+    private javax.swing.JComboBox<Part> cmbParts;
+    private javax.swing.JComboBox<Printer> cmbPrinters;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

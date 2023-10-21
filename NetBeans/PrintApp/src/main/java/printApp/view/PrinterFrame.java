@@ -63,6 +63,11 @@ public class PrinterFrame extends javax.swing.JFrame {
         txtName.setText(e.getPrinterName());
         txtManufacturer.setText(e.getManufacturer());
        //lblFepCount.setText(String.valueOf(count));
+        try {
+            lblFepCount.setText(String.valueOf(e.getFepCount()));
+        } catch (Exception ex) {
+            lblFepCount.setText("0");
+        }
     }
     
     

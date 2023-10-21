@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.Session;
+import printApp.controller.PrintJobController;
+import printApp.controller.PrinterController;
 import printApp.controller.UserController;
 import printApp.model.Material;
 import printApp.model.Part;
@@ -33,8 +35,8 @@ public class InitialInsert {
     private static final int NUMBER_OF_PROJECTS = 10;
     private static final int NUMBER_OF_PRINTERS = 3;
     private static final int NUMBER_OF_MATERIALS = 5;
-    private static final int NUMBER_OF_PARTS = 200;
-    private static final int NUMBER_OF_JOBS = 300;
+    private static final int NUMBER_OF_PARTS = 50;
+    private static final int NUMBER_OF_JOBS = 60;
 
     private Faker faker;
     private Session session;
@@ -62,8 +64,12 @@ public class InitialInsert {
         createParts();
         createPrintJobs();
 
+        //updatePrinters();
+
         session.getTransaction().commit();
         
+        
+
         setPassword();
     }
 
@@ -118,7 +124,7 @@ public class InitialInsert {
             p.setPrinterName(faker.starTrek().villain());
             p.setManufacturer(faker.space().planet());
             p.setPrinterTime(faker.number().numberBetween(10, 200));
-            p.setFepCount(faker.number().numberBetween(5, 28));
+            //p.setFepCount(faker.number().numberBetween(5, 28));
             session.persist(p);
             printers.add(p);
         }
@@ -144,33 +150,57 @@ public class InitialInsert {
         for (int i = 0; i < NUMBER_OF_PARTS; i++) {
             p = new Part();
             p.setPartName(faker.starTrek().character());
-            p.setStlOriginal(faker.file().fileName());
-            p.setStlSupported(faker.file().fileName());
-            p.setSlicedFile(faker.file().fileName());
+            p.setStlOriginal("C:\\" + faker.file().fileName());
+            p.setStlSupported("C:\\" + faker.file().fileName());
+            p.setSlicedFile("C:\\" + faker.file().fileName());
             p.setProject(projects.get(faker.number().numberBetween(0, NUMBER_OF_PROJECTS - 1)));
             session.persist(p);
             parts.add(p);
         }
     }
-    
-    private static void setPassword(){
+
+    private static void setPassword() {
         Argon2 argon2 = Argon2Factory.create();
-        
+
         String hash = argon2.hash(10, 65536, 1, "admin".toCharArray());
-        
+
         UserController oo = new UserController();
         User o = new User();
         o.setUserName("admin");
         o.setUserPassword(hash);
-        
+
         oo.setEntitet(o);
-        
+
         try {
             oo.create();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void updatePrinters() {
+        //List<PrintJob> l = session.createQuery("from PrintJob", PrintJob.class).list();
+                     
+        //PrinterController pc = new PrinterController();
+                
+       Printer p = new Printer();
+       
+       List<PrintJob> lp = p.getPrintJobs();
         
-}
+        
+        for (PrintJob pj : lp) {
+            
+            int count = 0;
+            
+//            p.setFepCount(pj.getPrinter().setFepCount(count++));
+            
+            pj.getPrinter().setFepCount(count++);
+           session.update(p);
+           printers.add(p);
+                   
+            
+        }
+    }
 
 }
