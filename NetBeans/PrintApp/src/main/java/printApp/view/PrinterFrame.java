@@ -19,67 +19,64 @@ import printApp.util.PrintAppException;
  * @author AMD
  */
 public class PrinterFrame extends javax.swing.JFrame {
-    
+
     private PrinterController control;
-    
-    
 
     /**
      * Creates new form PrinterFrame
      */
     public PrinterFrame() {
         initComponents();
-        
+
         setTitle("Printers");
         control = new PrinterController();
-        
+
         load();
-       
+
     }
-    
-    private void load(){
-        
+
+    private void load() {
+
         DefaultListModel<Printer> p = new DefaultListModel<>();
         p.addAll(control.read());
         lstData.setModel(p);
         lstData.repaint();
-        
+
     }
-    
-    private void fillModel(){
+
+    private void fillModel() {
         var e = control.getEntitet();
-        
+
         e.setPrinterName(txtName.getText());
         e.setManufacturer(txtManufacturer.getText());
-        
-        if(e.getFepCount()==null){
+
+        if (e.getFepCount() == null) {
             e.setFepCount(0);
+        } else {
+            e.setFepCount(Integer.valueOf(lblFepCount.getText()));
         }
-        
-        if(e.getPrinterTime()==null){
+
+        if (e.getPrinterTime() == null) {
             e.setPrinterTime(0);
         }
-        
+
     }
-    
-    private void fillView(){
-        
+
+    private void fillView() {
+
         var e = control.getEntitet();
-               
-       // List<PrintJob> list = new ArrayList<>();
-       // int count = list.size();
-        
+
+        // List<PrintJob> list = new ArrayList<>();
+        // int count = list.size();
         txtName.setText(e.getPrinterName());
         txtManufacturer.setText(e.getManufacturer());
-       //lblFepCount.setText(String.valueOf(count));
+
         try {
             lblFepCount.setText(String.valueOf(e.getFepCount()));
         } catch (Exception ex) {
             lblFepCount.setText("0");
         }
     }
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -96,12 +93,13 @@ public class PrinterFrame extends javax.swing.JFrame {
         txtName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtManufacturer = new javax.swing.JTextField();
-        lblFepCount = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        lblPrintCount = new javax.swing.JLabel();
+        btnReset = new javax.swing.JButton();
         lblPrinterTime = new javax.swing.JLabel();
         btnAdd = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        lblFepCount = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -116,9 +114,14 @@ public class PrinterFrame extends javax.swing.JFrame {
 
         jLabel2.setText("Manufacturer");
 
-        lblFepCount.setText("Print count:");
+        lblPrintCount.setText("Print count:");
 
-        jButton1.setText("Reset");
+        btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         lblPrinterTime.setText("Printer time:");
 
@@ -158,10 +161,13 @@ public class PrinterFrame extends javax.swing.JFrame {
                             .addComponent(txtName, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtManufacturer)
-                            .addComponent(lblFepCount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblPrinterTime, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblPrinterTime, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lblPrintCount)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lblFepCount, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1))
+                        .addComponent(btnReset))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -184,9 +190,10 @@ public class PrinterFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtManufacturer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblFepCount, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lblPrintCount, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnReset, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblFepCount, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addComponent(lblPrinterTime, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
@@ -217,7 +224,7 @@ public class PrinterFrame extends javax.swing.JFrame {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
 
-        if(lstData.getSelectedValue()==null){
+        if (lstData.getSelectedValue() == null) {
             return;
         }
 
@@ -235,17 +242,17 @@ public class PrinterFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        if(lstData.getSelectedValue()==null){
+        if (lstData.getSelectedValue() == null) {
             return;
         }
 
         var e = lstData.getSelectedValue();
 
-        if(JOptionPane.showConfirmDialog(getRootPane(),
-            "Are you sure you want to delete printer: \n\n" + e.getPrinterName(),
-            "Delete printer?",
-            JOptionPane.YES_NO_OPTION)!=JOptionPane.YES_OPTION) {
-        return;
+        if (JOptionPane.showConfirmDialog(getRootPane(),
+                "Are you sure you want to delete printer: \n\n" + e.getPrinterName(),
+                "Delete printer?",
+                JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+            return;
         }
 
         try {
@@ -258,32 +265,47 @@ public class PrinterFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void lstDataValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstDataValueChanged
-        
-        if (evt.getValueIsAdjusting()){
+
+        if (evt.getValueIsAdjusting()) {
             return;
         }
-        
-        if(lstData.getSelectedValue()==null){
+
+        if (lstData.getSelectedValue() == null) {
             return;
         }
-        
+
         control.setEntitet(lstData.getSelectedValue());
-        
+
         fillView();
-        
+
     }//GEN-LAST:event_lstDataValueChanged
 
-   
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+
+        if (JOptionPane.showConfirmDialog(getRootPane(),
+                "Are you sure you want to reset the counter?",
+                "Reset fep count",
+                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+            control.getEntitet().setFepCount(0);
+            control.resetCounter();
+        }
+
+        fillView();
+        fillModel();
+
+    }//GEN-LAST:event_btnResetActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnReset;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFepCount;
+    private javax.swing.JLabel lblPrintCount;
     private javax.swing.JLabel lblPrinterTime;
     private javax.swing.JList<Printer> lstData;
     private javax.swing.JTextField txtManufacturer;

@@ -3,7 +3,10 @@ package printApp.model;
 import jakarta.persistence.Column;
 import java.util.Date;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 public class Project extends Entitet {
@@ -22,8 +25,10 @@ public class Project extends Entitet {
     @Column(nullable = true)
     private BigDecimal totalCost;
     private String projectDescription;
+    @OneToMany(mappedBy ="project" )
+    private List<Part> parts;
 
-    public Project(Integer id, String projectName, Date creationDate, Date completionDate, boolean isCompleted, Integer totalPrintTime, Integer totalPrintCount, BigDecimal totalCost, String projectDescription) {
+    public Project(String projectName, Date creationDate, Date completionDate, boolean isCompleted, Integer totalPrintTime, Integer totalPrintCount, BigDecimal totalCost, String projectDescription, List<Part> parts, Integer id) {
         super(id);
         this.projectName = projectName;
         this.creationDate = creationDate;
@@ -33,6 +38,17 @@ public class Project extends Entitet {
         this.totalPrintCount = totalPrintCount;
         this.totalCost = totalCost;
         this.projectDescription = projectDescription;
+        this.parts = parts;
+    }
+
+    
+
+    public List<Part> getParts() {
+        return parts;
+    }
+
+    public void setParts(List<Part> parts) {
+        this.parts = parts;
     }
 
     public Project() {

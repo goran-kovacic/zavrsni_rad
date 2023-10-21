@@ -68,4 +68,13 @@ public class PrinterController extends Controller<Printer> {
         }
     }
 
+    public void resetCounter() {
+       
+        try {
+            update();
+        } catch (Exception e) {
+        }
+        
+    }
+
 }

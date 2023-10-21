@@ -4,8 +4,10 @@
  */
 package printApp.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
+import printApp.model.Part;
 import printApp.model.Project;
 import printApp.util.PrintAppException;
 
@@ -15,6 +17,27 @@ import printApp.util.PrintAppException;
  */
 public class ProjectController extends Controller<Project> {
 
+    @Override
+    public void delete() throws PrintAppException {
+    
+        PartController pc = new PartController();
+        
+        for(Part p : entitet.getParts()){
+            p.setProject(null);
+            pc.setEntitet(p);
+            try {
+                pc.update();
+            } catch (Exception e) {
+            }
+        }
+        
+        
+        super.delete(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+
+    
+    
+    
     @Override
     public List<Project> read() {
         return session.createQuery("from Project", Project.class).list();
@@ -39,7 +62,24 @@ public class ProjectController extends Controller<Project> {
 
     @Override
     protected void controlDelete() throws PrintAppException {
-
+//        if(!entitet.getParts().isEmpty()){
+//            
+//            PartController pc = new PartController();
+//            
+//            List<Part> list = new ArrayList<>();
+//            
+//            for(int i=0; i<entitet.getParts().size(); i++){
+//                
+//                pc.entitet.setProject(null);
+//                
+//                
+//                
+//                
+//            }
+//            
+//            
+//            
+//        }
     }
 
     private void controlName() throws PrintAppException {
