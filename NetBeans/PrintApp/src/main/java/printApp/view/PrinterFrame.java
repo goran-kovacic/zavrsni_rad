@@ -51,6 +51,15 @@ public class PrinterFrame extends javax.swing.JFrame {
         
         e.setPrinterName(txtName.getText());
         e.setManufacturer(txtManufacturer.getText());
+        
+        if(e.getFepCount()==null){
+            e.setFepCount(0);
+        }
+        
+        if(e.getPrinterTime()==null){
+            e.setPrinterTime(0);
+        }
+        
     }
     
     private void fillView(){

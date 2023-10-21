@@ -147,7 +147,25 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface{
 
         var e = control.getEntitet();
         
+        e.setPrinter((Printer) cmbPrinters.getSelectedItem());
         
+        e.setPart((Part) cmbParts.getSelectedItem());
+        
+        e.setMaterial((Material) cmbMaterials.getSelectedItem());
+        
+        if(txtVolume.getText()==null){
+            e.setVolume(BigDecimal.ZERO);
+        }else{
+            e.setVolume(BigDecimal.valueOf(Double.parseDouble(txtVolume.getText())));
+        }
+        
+        if(txtTime.getText()==null){
+            e.setPrintTime(0);
+        }else{
+            e.setPrintTime(Integer.valueOf(txtTime.getText()));
+        }
+        
+        e.setResult(chkResult.isSelected());
 
     }
 
