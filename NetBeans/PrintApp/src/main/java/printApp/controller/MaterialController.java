@@ -6,6 +6,8 @@ package printApp.controller;
 
 import java.util.List;
 import printApp.model.Material;
+import printApp.model.Part;
+import printApp.model.PrintJob;
 import printApp.util.PrintAppException;
 
 /**
@@ -13,6 +15,10 @@ import printApp.util.PrintAppException;
  * @author AMD
  */
 public class MaterialController extends Controller<Material> {
+    
+    private final String errorMessage = """
+                                        Must be a positive number.
+                                        If writing decimals use period as separator.""";
 
     @Override
     public List<Material> read() {
@@ -22,6 +28,7 @@ public class MaterialController extends Controller<Material> {
     @Override
     protected void controlCreate() throws PrintAppException {
         controlName();
+        appendName();
         controlBottomExposure();
         controlBottomLiftDistance();
         controlBottomLiftSpeed();
@@ -53,6 +60,17 @@ public class MaterialController extends Controller<Material> {
 
     @Override
     protected void controlDelete() throws PrintAppException {
+        
+        if(!entitet.getPrintJobs().isEmpty()){
+            StringBuilder sb = new StringBuilder();
+            sb.append("Cannot delete resin because it has associated print jobs: \n");
+             for (PrintJob p : entitet.getPrintJobs()){
+                sb.append(p.getPart().getPartName());
+                sb.append("\n");
+            }
+            sb.append("\nRemove these print jobs before deleting the printer.");
+            throw new PrintAppException(sb.toString());
+        }
 
     }
 
@@ -70,6 +88,16 @@ public class MaterialController extends Controller<Material> {
             throw new PrintAppException("Manufacturer name cannot be emtpy!");
         }
     }
+    
+    private void appendName() {
+        List<Material> list = session.createQuery("from Material m where m.materialName like :condition", Material.class)
+                .setParameter("condition", entitet.getMaterialName()+ "%")
+                .list();
+
+        if (list != null && !list.isEmpty()) {
+            entitet.setMaterialName(entitet.getMaterialName()+ " (" + (list.size()) + ")");
+        }
+    }
 
     private void controlBottomExposure() throws PrintAppException {
         if (entitet.getBottomExposure() == null) {
@@ -77,7 +105,7 @@ public class MaterialController extends Controller<Material> {
         }
 
         if (entitet.getBottomExposure().floatValue() <= 0f) {
-            throw new PrintAppException("Bottom exposure must be a positive number");
+            throw new PrintAppException(errorMessage);
         }
     }
 
@@ -87,7 +115,7 @@ public class MaterialController extends Controller<Material> {
         }
 
         if (entitet.getBottomLiftDistance() <= 0) {
-            throw new PrintAppException("Bottom lift distance must be a positive number");
+            throw new PrintAppException(errorMessage);
         }
 
     }
@@ -98,7 +126,7 @@ public class MaterialController extends Controller<Material> {
         }
 
         if (entitet.getBottomLiftSpeed().floatValue() <= 0f) {
-            throw new PrintAppException("Bottom lift speed must be a positive number");
+            throw new PrintAppException(errorMessage);
         }
     }
 
@@ -108,18 +136,20 @@ public class MaterialController extends Controller<Material> {
         }
 
         if (entitet.getBottomRetractSpeed().floatValue() <= 0f) {
-            throw new PrintAppException("Bottom retract speed must be a positive number");
+            throw new PrintAppException(errorMessage);
         }
     }
 
-    private void controlCalibratedExposure() throws PrintAppException {
+    private void controlCalibratedExposure() throws PrintAppException, NullPointerException {
         if (entitet.getCalibratedExposure() == null) {
             return;
         }
-
+        
+        
         if (entitet.getCalibratedExposure().floatValue() <= 0f) {
-            throw new PrintAppException("Exposure must be a positive number");
+            throw new PrintAppException(errorMessage);
         }
+
     }
 
     private void controlCostPerUnit() throws PrintAppException {
@@ -128,7 +158,7 @@ public class MaterialController extends Controller<Material> {
         }
 
         if (entitet.getCostPerUnit().floatValue() <= 0f) {
-            throw new PrintAppException("Cost must be a positive number");
+            throw new PrintAppException(errorMessage);
         }
     }
 
@@ -138,7 +168,7 @@ public class MaterialController extends Controller<Material> {
         }
 
         if (entitet.getLayerHeight().floatValue() <= 0f) {
-            throw new PrintAppException("Layer height must be a positive number");
+            throw new PrintAppException(errorMessage);
         }
     }
 
@@ -148,7 +178,7 @@ public class MaterialController extends Controller<Material> {
         }
 
         if (entitet.getLiftDistance() <= 0) {
-            throw new PrintAppException("Lift distance must be a positive number");
+            throw new PrintAppException(errorMessage);
         }
     }
 
@@ -158,7 +188,7 @@ public class MaterialController extends Controller<Material> {
         }
 
         if (entitet.getLiftSpeed().floatValue() <= 0f) {
-            throw new PrintAppException("Lift speed must be a positive number");
+            throw new PrintAppException(errorMessage);
         }
     }
 
@@ -167,8 +197,8 @@ public class MaterialController extends Controller<Material> {
             return;
         }
 
-        if (entitet.getLightOffDelay().floatValue() < 0f) {
-            throw new PrintAppException("Light off delay must be a positive number");
+        if (entitet.getLightOffDelay().floatValue() <= 0f) {
+            throw new PrintAppException(errorMessage);
         }
     }
 
@@ -178,7 +208,7 @@ public class MaterialController extends Controller<Material> {
         }
 
         if (entitet.getRetractSpeed().floatValue() <= 0f) {
-            throw new PrintAppException("Retract speed must be a positive number");
+            throw new PrintAppException(errorMessage);
         }
     }
 

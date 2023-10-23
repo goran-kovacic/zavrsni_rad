@@ -18,7 +18,7 @@ import printApp.util.PrintAppException;
  *
  * @author AMD
  */
-public class MaterialFrame extends javax.swing.JFrame implements ViewInterface{
+public class MaterialFrame extends javax.swing.JFrame implements ViewInterface {
 
     private MaterialController control;
     private DecimalFormat df;
@@ -53,71 +53,74 @@ public class MaterialFrame extends javax.swing.JFrame implements ViewInterface{
         var e = control.getEntitet();
         e.setMaterialName(txtName.getText());
         e.setManufacturer(txtManufacturer.getText());
-       
-        if(txtLayerHeight.getText()==null){
-            e.setLayerHeight(BigDecimal.ZERO);
-        }else{
+
+        try {
             e.setLayerHeight(BigDecimal.valueOf(Double.parseDouble(txtLayerHeight.getText())));
+
+        } catch (Exception ex) {
+            e.setLayerHeight(BigDecimal.ZERO);
         }
-        
-        if(txtLiftDistance.getText()==null){
-            e.setLiftDistance(0);
-        }else{
+
+        try {
             e.setLiftDistance(Integer.valueOf(txtLiftDistance.getText()));
+        } catch (Exception ex) {
+            e.setLiftDistance(0);
         }
-        
-        if(txtLiftSpeed.getText()==null){
-            e.setLiftSpeed(BigDecimal.ZERO);
-        }else{
+
+        try {
             e.setLiftSpeed(BigDecimal.valueOf(Double.parseDouble(txtLiftSpeed.getText())));
+        } catch (Exception ex) {
+            e.setLiftSpeed(BigDecimal.ZERO);
         }
-        
-        if(txtLightOffDelay.getText()==null){
-            e.setLightOffDelay(BigDecimal.ZERO);
-        }else{
+
+        try {
             e.setLightOffDelay(BigDecimal.valueOf(Double.parseDouble(txtLightOffDelay.getText())));
+        } catch (Exception ex) {
+            e.setLightOffDelay(BigDecimal.ZERO);
         }
-        
-        if(txtRetractSpeed.getText()==null){
-            e.setRetractSpeed(BigDecimal.ZERO);
-        }else{
+
+        try {
             e.setRetractSpeed(BigDecimal.valueOf(Double.parseDouble(txtRetractSpeed.getText())));
+        } catch (Exception ex) {
+            e.setRetractSpeed(BigDecimal.ZERO);
         }
-        
-        if(txtCalibratedExposure.getText()==null){
-            e.setCalibratedExposure(BigDecimal.ZERO);
-        }else{
+
+        //slati BigDecimal.ZERO preko preko parseDouble 
+        try {
+//          ovo izbacuje iz edita
+//          e.setCalibratedExposure(BigDecimal.valueOf(df.parse(txtCalibratedExposure.getText()).doubleValue()));
             e.setCalibratedExposure(BigDecimal.valueOf(Double.parseDouble(txtCalibratedExposure.getText())));
+        } catch (Exception ex) {
+            e.setCalibratedExposure(BigDecimal.ZERO);
         }
-        
-        if(txtBottomExposure.getText()==null){
-            e.setBottomExposure(BigDecimal.ZERO);
-        }else{
+
+        try {
             e.setBottomExposure(BigDecimal.valueOf(Double.parseDouble(txtBottomExposure.getText())));
-        }
+        } catch (Exception ex) {
+            e.setBottomExposure(BigDecimal.ZERO);
+        }              
         
-        if(txtBottomLiftSpeed.getText()==null){
-            e.setBottomLiftSpeed(BigDecimal.ZERO);
-        }else{
+        try {
             e.setBottomLiftSpeed(BigDecimal.valueOf(Double.parseDouble(txtBottomLiftSpeed.getText())));
+        } catch (Exception ex) {
+            e.setBottomLiftSpeed(BigDecimal.ZERO);
         }
         
-        if(txtBottomLiftDistance.getText()==null){
-            e.setBottomLiftDistance(0);
-        }else{
+        try {
             e.setBottomLiftDistance(Integer.valueOf(txtBottomLiftDistance.getText()));
+        } catch (Exception ex) {
+            e.setBottomLiftDistance(0);
         }
-        
-        if(txtBottomRetractSpeed.getText()==null){
-            e.setBottomRetractSpeed(BigDecimal.ZERO);
-        }else{
+        try {
             e.setBottomRetractSpeed(BigDecimal.valueOf(Double.parseDouble(txtBottomRetractSpeed.getText())));
+        } catch (Exception ex) {
+            e.setBottomRetractSpeed(BigDecimal.ZERO);
         }
-        
-        if(txtCost.getText()==null){
-            e.setCostPerUnit(BigDecimal.ZERO);
-        }else{
+
+        try {
             e.setCostPerUnit(BigDecimal.valueOf(Double.parseDouble(txtCost.getText())));
+        } catch (Exception ex) {
+            e.setCostPerUnit(BigDecimal.ZERO);
         }
     }
 
@@ -128,69 +131,68 @@ public class MaterialFrame extends javax.swing.JFrame implements ViewInterface{
 
         txtName.setText(e.getMaterialName());
         txtManufacturer.setText(e.getManufacturer());
-        
+
         try {
             txtLayerHeight.setText(df.format(e.getLayerHeight()));
         } catch (Exception ex) {
             txtLayerHeight.setText(df.format(0));
         }
-        
+
         try {
             txtLiftDistance.setText(df.format(e.getLiftDistance()));
         } catch (Exception ex) {
             txtLiftDistance.setText(df.format(0));
         }
-        
+
         try {
             txtLiftSpeed.setText(df.format(e.getLiftSpeed()));
         } catch (Exception ex) {
             txtLiftSpeed.setText(df.format(0));
         }
-        
+
         try {
             txtLightOffDelay.setText(df.format(e.getLightOffDelay()));
         } catch (Exception ex) {
             txtLightOffDelay.setText(df.format(0));
         }
-        
-         try {
+
+        try {
             txtRetractSpeed.setText(df.format(e.getRetractSpeed()));
         } catch (Exception ex) {
             txtRetractSpeed.setText(df.format(0));
         }
-        
-         try {
+
+        try {
             txtCalibratedExposure.setText(df.format(e.getCalibratedExposure()));
         } catch (Exception ex) {
             txtCalibratedExposure.setText(df.format(0));
         }
-         try {
+        try {
             txtBottomExposure.setText(df.format(e.getBottomExposure()));
         } catch (Exception ex) {
             txtBottomExposure.setText(df.format(0));
         }
-         try {
+        try {
             txtBottomLiftDistance.setText(df.format(e.getBottomLiftDistance()));
         } catch (Exception ex) {
             txtBottomLiftDistance.setText(df.format(0));
         }
-          try {
+        try {
             txtBottomLiftSpeed.setText(df.format(e.getBottomLiftSpeed()));
         } catch (Exception ex) {
             txtBottomLiftSpeed.setText(df.format(0));
         }
-          try {
+        try {
             txtBottomRetractSpeed.setText(df.format(e.getBottomRetractSpeed()));
         } catch (Exception ex) {
             txtBottomRetractSpeed.setText(df.format(0));
         }
-          try {
+        try {
             txtCost.setText(df.format(e.getCostPerUnit()));
         } catch (Exception ex) {
             txtCost.setText(df.format(0));
         }
-        
-        
+
     }
 
     /**

@@ -18,6 +18,7 @@ public class PrintJobController extends Controller<PrintJob> {
     public void create() throws PrintAppException {
         super.create();
         entitet.getPrinter().setFepCount(entitet.getPrinter().getFepCount() + 1);
+        entitet.getPrinter().setPrinterTime( ( entitet.getPrinter().getPrinterTime() ) + ( entitet.getPrintTime() ) );
 
         PrinterController pc = new PrinterController();
         pc.setEntitet(entitet.getPrinter());
@@ -35,7 +36,7 @@ public class PrintJobController extends Controller<PrintJob> {
 
     @Override
     protected void controlCreate() throws PrintAppException {
-
+        
         controlVolume();
         controlPrintTime();
     }

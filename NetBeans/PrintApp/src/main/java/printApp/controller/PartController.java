@@ -34,6 +34,7 @@ public class PartController extends Controller<Part> {
     @Override
     protected void controlCreate() throws PrintAppException {
         controlName();
+        appendName();
         controlStlOriginal();
         controlStlSupported();
         controlSlicedFile();
@@ -61,6 +62,16 @@ public class PartController extends Controller<Part> {
             throw new PrintAppException("Part name cannot be emtpy!");
         }
 
+    }
+    
+    private void appendName() {
+        List<Part> list = session.createQuery("from Part p where p.partName like :condition", Part.class)
+                .setParameter("condition", entitet.getPartName()+ "%")
+                .list();
+
+        if (list != null && !list.isEmpty()) {
+            entitet.setPartName(entitet.getPartName()+ " (" + (list.size()) + ")");
+        }
     }
 
     private void controlStlOriginal() throws PrintAppException {

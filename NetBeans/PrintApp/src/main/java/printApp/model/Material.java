@@ -2,7 +2,10 @@ package printApp.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Material extends Entitet {
@@ -22,6 +25,8 @@ public class Material extends Entitet {
     private BigDecimal retractSpeed;
     private BigDecimal bottomRetractSpeed;
     private BigDecimal lightOffDelay;
+    @OneToMany(mappedBy = "material")
+    private List<PrintJob> printJobs = new ArrayList<>();
 
     public Material(Integer id, String materialName, String manufacturer, BigDecimal costPerUnit, BigDecimal calibratedExposure, BigDecimal layerHeight, BigDecimal bottomExposure, Integer liftDistance, BigDecimal liftSpeed, Integer bottomLiftDistance, BigDecimal bottomLiftSpeed, BigDecimal retractSpeed, BigDecimal bottomRetractSpeed, BigDecimal lightOffDelay) {
         super(id);
@@ -43,6 +48,12 @@ public class Material extends Entitet {
     public Material() {
         super();
     }
+
+    public List<PrintJob> getPrintJobs() {
+        return printJobs;
+    }
+    
+    
 
     public String getMaterialName() {
         return materialName;

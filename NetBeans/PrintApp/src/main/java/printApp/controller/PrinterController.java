@@ -5,6 +5,7 @@
 package printApp.controller;
 
 import java.util.List;
+import printApp.model.PrintJob;
 import printApp.model.Printer;
 import printApp.util.PrintAppException;
 
@@ -38,6 +39,19 @@ public class PrinterController extends Controller<Printer> {
 
     @Override
     protected void controlDelete() throws PrintAppException {
+        
+        if(!entitet.getPrintJobs().isEmpty()){
+            
+            StringBuilder sb = new StringBuilder();
+            sb.append("Cannot delete printer beceause it has associated print jobs: \n");
+            for (PrintJob p : entitet.getPrintJobs()){
+                sb.append(p.getPart().getPartName());
+                sb.append("\n");
+            }
+            sb.append("\nRemove these print jobs before deleting the printer.");
+            
+            throw new PrintAppException(sb.toString());
+        }
 
     }
 
