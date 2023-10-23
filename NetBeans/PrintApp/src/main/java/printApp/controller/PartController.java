@@ -11,6 +11,7 @@ import printApp.util.PrintAppException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import printApp.model.PrintJob;
 import printApp.model.Project;
 
 /**
@@ -25,7 +26,7 @@ public class PartController extends Controller<Part> {
     }
 
     public List<Part> readByProject(Project selected) {
-        
+
         return session.createQuery("from Part p where p.project.id = :condition", Part.class)
                 .setParameter("condition", selected.getId()).list();
 
@@ -53,6 +54,27 @@ public class PartController extends Controller<Part> {
 
     }
 
+    @Override
+    public void delete() throws PrintAppException {
+        PrintJobController pjb = new PrintJobController();
+        PartController pc = new PartController();
+        for (PrintJob p : entitet.getPrintJobs()) {
+            pjb.setEntitet(p);
+            try {
+                pjb.delete();
+
+            } catch (Exception e) {
+            }
+
+        }
+
+        pc.setEntitet(getEntitet());
+        session.beginTransaction();
+        session.remove(entitet);
+        session.getTransaction().commit();
+
+    }
+
     private void controlName() throws PrintAppException {
 
         if (entitet.getPartName() == null) {
@@ -63,14 +85,14 @@ public class PartController extends Controller<Part> {
         }
 
     }
-    
+
     private void appendName() {
         List<Part> list = session.createQuery("from Part p where p.partName like :condition", Part.class)
-                .setParameter("condition", entitet.getPartName()+ "%")
+                .setParameter("condition", entitet.getPartName() + "%")
                 .list();
 
         if (list != null && !list.isEmpty()) {
-            entitet.setPartName(entitet.getPartName()+ " (" + (list.size()) + ")");
+            entitet.setPartName(entitet.getPartName() + " (" + (list.size()) + ")");
         }
     }
 

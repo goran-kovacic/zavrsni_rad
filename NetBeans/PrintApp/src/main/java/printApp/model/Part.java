@@ -3,7 +3,9 @@ package printApp.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Entity
@@ -18,6 +20,8 @@ public class Part extends Entitet {
     private Project project;
     private BigDecimal cost;
     private Integer printTime;
+    @OneToMany(mappedBy = "part")
+    private List<PrintJob> printJobs;
 
     public Part(Integer id, String partName, String stlOriginal, String stlSupported, String slicedFile, Project project, BigDecimal cost, Integer printTime) {
         super(id);
@@ -37,6 +41,12 @@ public class Part extends Entitet {
         super();
     }
 
+    public List<PrintJob> getPrintJobs() {
+        return printJobs;
+    }
+
+    
+    
     public String getPartName() {
         return partName;
     }

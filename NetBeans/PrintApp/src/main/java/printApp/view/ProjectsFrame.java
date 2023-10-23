@@ -397,22 +397,68 @@ public class ProjectsFrame extends javax.swing.JFrame implements ViewInterface {
         if (lstData.getSelectedValue() == null) {
             return;
         }
-
+        Object[] buttons = { "Delete only project" , "Delete projects and parts" , "Cancel" };
+        
         var e = lstData.getSelectedValue();
 
-        if (JOptionPane.showConfirmDialog(getRootPane(),
-                "Are you sure you want to delete project: \n\n" + e.getProjectName(),
-                "Delete project?",
-                JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
-            return;
-        }
+//        if (JOptionPane.showConfirmDialog(getRootPane(),
+//                "Are you sure you want to delete project: \n\n" + e.getProjectName(),
+//                "Delete project?",
+//                JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+//            return;
+//        }
 
-        try {
+        if(JOptionPane.showOptionDialog(getRootPane(),
+                "Delete project and parts or only project ", 
+                "Delete",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                buttons, null) == JOptionPane.YES_OPTION){
+            
+            control.setEntitet(e);
+        
+            try {
             control.delete();
             load();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
         }
+            
+        }else if(JOptionPane.showOptionDialog(getRootPane(),
+                "Delete project and parts or only project ", 
+                "Delete",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                buttons, null) == JOptionPane.NO_OPTION){
+            
+            control.setEntitet(e);
+//            ProjectController pc = new ProjectController();
+            try {
+                control.deleteProjectPartPrintJob();
+               
+            } catch (Exception ex) {
+            }
+            
+        }else if(JOptionPane.showOptionDialog(getRootPane(),
+                "Delete project and parts or only project ", 
+                "Delete",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                buttons, null) == JOptionPane.CANCEL_OPTION){
+            return;
+        }
+        
+        
+
+//        try {
+//            control.delete();
+//            load();
+//        } catch (Exception ex) {
+//            JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
+//        }
 
     }//GEN-LAST:event_btnDeleteActionPerformed
 

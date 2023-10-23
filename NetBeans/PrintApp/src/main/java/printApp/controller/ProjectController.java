@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import printApp.model.Part;
+import printApp.model.PrintJob;
 import printApp.model.Project;
 import printApp.util.PrintAppException;
 
@@ -33,6 +34,27 @@ public class ProjectController extends Controller<Project> {
         
         
         super.delete(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
+    
+    public void deleteProjectPartPrintJob() throws PrintAppException{
+        
+        PartController pc = new PartController();
+        ProjectController prc = new ProjectController();
+              
+        for(Part p : entitet.getParts()){
+            
+            pc.setEntitet(p);
+            try {
+                pc.delete();
+            } catch (Exception e) {
+            }
+        }
+        
+        prc.setEntitet(getEntitet());
+        session.beginTransaction();
+        session.remove(entitet);
+        session.getTransaction().commit();
+        
     }
 
     
