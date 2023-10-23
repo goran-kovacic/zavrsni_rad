@@ -33,10 +33,10 @@ public class InitialInsert {
     private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     private static final int NUMBER_OF_PROJECTS = 10;
-    private static final int NUMBER_OF_PRINTERS = 3;
+    private static final int NUMBER_OF_PRINTERS = 5;
     private static final int NUMBER_OF_MATERIALS = 5;
-    private static final int NUMBER_OF_PARTS = 50;
-    private static final int NUMBER_OF_JOBS = 60;
+    private static final int NUMBER_OF_PARTS = 20;
+    private static final int NUMBER_OF_JOBS = 30;
 
     private Faker faker;
     private Session session;
@@ -89,6 +89,10 @@ public class InitialInsert {
                 p.setCompletionDate(faker.date().between(startDate, endDate));
             } catch (Exception e) {
             }
+            
+            p.setTotalCost(new BigDecimal(faker.number().numberBetween(10, 100)));
+            p.setTotalPrintCount(faker.number().numberBetween(1, 10));
+            p.setTotalPrintTime(faker.number().numberBetween(10, 100));
 
             session.persist(p);
             projects.add(p);
@@ -154,6 +158,11 @@ public class InitialInsert {
             p.setStlSupported("C:\\" + faker.file().fileName());
             p.setSlicedFile("C:\\" + faker.file().fileName());
             p.setProject(projects.get(faker.number().numberBetween(0, NUMBER_OF_PROJECTS - 1)));
+            
+            p.setCost(new BigDecimal(faker.number().numberBetween(10, 100)));
+            p.setPrintTime(faker.number().numberBetween(1, 10));
+            
+            
             session.persist(p);
             parts.add(p);
         }

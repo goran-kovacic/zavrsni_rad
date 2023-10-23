@@ -4,6 +4,7 @@
  */
 package printApp.view;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,6 +12,8 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
@@ -39,7 +42,7 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
         initComponents();
 
         DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.of("en", "EN"));
-        df = new DecimalFormat("###,##0.00", dfs);
+        df = new DecimalFormat("####.##", dfs);
 
         setTitle(Util.APP_NAME + " | Parts");
         control = new PartController();
@@ -97,6 +100,20 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
         txtOriginal.setText(e.getStlOriginal());
         txtSupported.setText(e.getStlSupported());
         txtSliced.setText(e.getSlicedFile());
+        
+        try {
+            lblPrintTime.setText(df.format(e.getPrintTime()));
+        } catch (Exception ex) {
+            lblPrintTime.setText(df.format(0));
+        }
+        
+        try {
+            lblCost.setText(df.format(e.getCost()));
+        } catch (Exception ex) {
+            lblCost.setText(df.format(0));
+        }
+        
+        
 
     }
 
@@ -158,6 +175,11 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
         btnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         cmbShowByProject = new javax.swing.JComboBox<>();
+        btnOpenOriginal = new javax.swing.JButton();
+        btnOpenSupported = new javax.swing.JButton();
+        btnOpenSliced = new javax.swing.JButton();
+        lblPrintTime = new javax.swing.JLabel();
+        lblCost = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -211,9 +233,9 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
             }
         });
 
-        jLabel6.setText("Print time: ");
+        jLabel6.setText("Print time (hrs): ");
 
-        jLabel7.setText("Cost: ");
+        jLabel7.setText("Cost (€): ");
 
         btnAdd.setText("Add");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -242,6 +264,17 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
             }
         });
 
+        btnOpenOriginal.setText("Open");
+        btnOpenOriginal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenOriginalActionPerformed(evt);
+            }
+        });
+
+        btnOpenSupported.setText("Open");
+
+        btnOpenSliced.setText("Open");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -260,11 +293,15 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnOpenOriginal)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnBrowseOriginal))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnOpenSliced)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnBrowseSliced))
                             .addComponent(txtSliced)
                             .addComponent(txtOriginal)
@@ -272,24 +309,35 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel2)
-                                            .addComponent(cmbProject, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnAdd)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btnDelete)))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGap(18, 18, 18)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel2)
+                                                .addComponent(cmbProject, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addComponent(btnOpenSupported, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(43, 43, 43))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(btnAdd)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(btnDelete))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                .addGroup(layout.createSequentialGroup()
+                                                    .addComponent(jLabel7)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(lblCost, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addComponent(jLabel6))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(lblPrintTime, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addGap(0, 0, Short.MAX_VALUE)))))
-                .addGap(25, 25, 25))
+                .addGap(16, 16, 16))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -312,25 +360,32 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
                         .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
-                            .addComponent(btnBrowseOriginal))
+                            .addComponent(btnBrowseOriginal)
+                            .addComponent(btnOpenOriginal))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtOriginal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
-                            .addComponent(btnBrowseSupported))
+                            .addComponent(btnBrowseSupported)
+                            .addComponent(btnOpenSupported))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtSupported, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(btnBrowseSliced))
+                            .addComponent(btnBrowseSliced)
+                            .addComponent(btnOpenSliced))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtSliced, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(lblPrintTime, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel7)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblCost, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAdd)
@@ -478,6 +533,15 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
 
     }//GEN-LAST:event_cmbShowByProjectActionPerformed
 
+    private void btnOpenOriginalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenOriginalActionPerformed
+        try {
+            Desktop.getDesktop().open(new File(txtOriginal.getText()));
+        } catch (IOException ex) {
+//            Logger.getLogger(PartsFrame.class.getName()).log(Level.SEVERE, null, ex);
+              JOptionPane.showMessageDialog(getRootPane(), "file doesnt exist");
+        }
+    }//GEN-LAST:event_btnOpenOriginalActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -486,6 +550,9 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
     private javax.swing.JButton btnBrowseSupported;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnOpenOriginal;
+    private javax.swing.JButton btnOpenSliced;
+    private javax.swing.JButton btnOpenSupported;
     private javax.swing.JComboBox<Project> cmbProject;
     private javax.swing.JComboBox<Project> cmbShowByProject;
     private javax.swing.JLabel jLabel1;
@@ -496,6 +563,8 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblCost;
+    private javax.swing.JLabel lblPrintTime;
     private javax.swing.JList<Part> lstData;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtOriginal;

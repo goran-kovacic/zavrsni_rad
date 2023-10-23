@@ -103,6 +103,18 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
         lstData.repaint();
 
     }
+    
+    private BigDecimal cost(){
+        
+        var e = control.getEntitet();
+        
+        BigDecimal cpu = e.getMaterial().getCostPerUnit();
+
+        BigDecimal volume = e.getVolume().divide(BigDecimal.valueOf(1000));
+
+       return cpu.multiply(volume);
+        
+    }
 
     @Override
     public void fillView() {
@@ -123,14 +135,10 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
 
         txtTime.setText(String.valueOf(e.getPrintTime()));
 
-        BigDecimal cpu = e.getMaterial().getCostPerUnit();
-
-        BigDecimal volume = e.getVolume().divide(BigDecimal.valueOf(1000));
-
-        BigDecimal result = cpu.multiply(volume);
+        
 
         try {
-            lblCost.setText("Cost: " + df.format(result) + " €");
+            lblCost.setText(df.format(cost()));
 
         } catch (Exception ex) {
             lblCost.setText(df.format(0));
@@ -165,6 +173,12 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
             e.setVolume(BigDecimal.valueOf(Double.parseDouble(txtVolume.getText())));
         } catch (Exception ex) {
             e.setVolume(BigDecimal.ZERO);
+        }
+        
+        try {
+            e.setCost(cost());
+        } catch (Exception ex) {
+            e.setCost(BigDecimal.ZERO);
         }
 
         try {
@@ -205,6 +219,7 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
         btnAdd = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -260,6 +275,8 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
             }
         });
 
+        jLabel8.setText("Cost (€):");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -280,7 +297,6 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
                     .addComponent(jLabel6)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(lblCost, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtTime, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtVolume, javax.swing.GroupLayout.Alignment.LEADING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -295,7 +311,11 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnDelete)))
+                        .addComponent(btnDelete))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblCost, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -329,7 +349,9 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
                             .addComponent(txtTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7))
                         .addGap(18, 18, 18)
-                        .addComponent(lblCost)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblCost)
+                            .addComponent(jLabel8))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnAdd)
@@ -354,6 +376,8 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
         } catch (PrintAppException ex) {
             JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
         }
+        
+        
 
     }//GEN-LAST:event_btnAddActionPerformed
 
@@ -430,6 +454,7 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCost;
     private javax.swing.JList<PrintJob> lstData;

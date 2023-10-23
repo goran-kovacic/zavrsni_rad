@@ -19,6 +19,8 @@ public class PrintJobController extends Controller<PrintJob> {
         super.create();
         entitet.getPrinter().setFepCount(entitet.getPrinter().getFepCount() + 1);
         entitet.getPrinter().setPrinterTime((entitet.getPrinter().getPrinterTime()) + (entitet.getPrintTime()));
+        
+        
 
         PrinterController pc = new PrinterController();
         pc.setEntitet(entitet.getPrinter());
@@ -87,19 +89,19 @@ public class PrintJobController extends Controller<PrintJob> {
 
     private void controlMaterial() throws PrintAppException {
         if (entitet.getMaterial() == null) {
-            throw new PrintAppException("Select resin");
+            throw new PrintAppException("Select resin!");
         }
     }
 
     private void controlPart() throws PrintAppException{
         if(entitet.getPart() == null){
-            throw new PrintAppException("Select part");
+            throw new PrintAppException("Select part!");
         }
     }
 
     private void controlPrinter() throws PrintAppException{
         if(entitet.getPrinter() == null){
-            throw new PrintAppException("Select a printer");
+            throw new PrintAppException("Select a printer!");
         }
     }
 
