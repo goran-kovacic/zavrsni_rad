@@ -124,7 +124,7 @@ public class InitialInsert {
             p.setPrinterName(faker.starTrek().villain());
             p.setManufacturer(faker.space().planet());
             p.setPrinterTime(faker.number().numberBetween(10, 200));
-            //p.setFepCount(faker.number().numberBetween(5, 28));
+            p.setFepCount(faker.number().numberBetween(5, 28));
             session.persist(p);
             printers.add(p);
         }
@@ -184,7 +184,7 @@ public class InitialInsert {
                      
         //PrinterController pc = new PrinterController();
                 
-       Printer p = new Printer();
+       var p = new Printer();
        
        List<PrintJob> lp = p.getPrintJobs();
         

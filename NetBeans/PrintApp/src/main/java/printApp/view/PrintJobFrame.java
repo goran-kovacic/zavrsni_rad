@@ -26,7 +26,7 @@ import printApp.util.Util;
  *
  * @author AMD
  */
-public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface{
+public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
 
     private PrintJobController control;
     private DecimalFormat df;
@@ -36,23 +36,23 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface{
      */
     public PrintJobFrame() {
         initComponents();
-        
+
         DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.of("en", "EN"));
         df = new DecimalFormat("###,##0.00", dfs);
 
         setTitle(Util.APP_NAME + " | Print Jobs");
         control = new PrintJobController();
-        
+
         loadParts();
         loadPrinters();
         loadMaterials();
-        
+
         load();
 
     }
-    
-    private void loadMaterials(){
-        
+
+    private void loadMaterials() {
+
         DefaultComboBoxModel<Material> m = new DefaultComboBoxModel<>();
 
         Material p = new Material();
@@ -63,11 +63,11 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface{
 
         cmbMaterials.setModel(m);
         cmbMaterials.repaint();
-        
+
     }
-    
-   private void loadPrinters(){
-       DefaultComboBoxModel<Printer> m = new DefaultComboBoxModel<>();
+
+    private void loadPrinters() {
+        DefaultComboBoxModel<Printer> m = new DefaultComboBoxModel<>();
 
         Printer p = new Printer();
         p.setId(0);
@@ -77,8 +77,8 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface{
 
         cmbPrinters.setModel(m);
         cmbPrinters.repaint();
-   }
-    
+    }
+
     private void loadParts() {
 
         DefaultComboBoxModel<Part> m = new DefaultComboBoxModel<>();
@@ -91,7 +91,7 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface{
 
         cmbParts.setModel(m);
         cmbParts.repaint();
-        
+
     }
 
     @Override
@@ -103,86 +103,76 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface{
         lstData.repaint();
 
     }
-    
+
     @Override
-    public void fillView(){
-        
+    public void fillView() {
+
         var e = control.getEntitet();
-        
+
         cmbPrinters.setSelectedItem(e.getPrinter());
         cmbParts.setSelectedItem(control.getEntitet().getPart());
         cmbMaterials.setSelectedItem(e.getMaterial());
-        
+
         try {
             txtVolume.setText(df.format(e.getVolume()));
         } catch (Exception ex) {
             txtVolume.setText(df.format(0));
         }
-               
+
         chkResult.setSelected(e.isResult());
-        
+
         txtTime.setText(String.valueOf(e.getPrintTime()));
-        
-        BigDecimal cpu =  e.getMaterial().getCostPerUnit();
-        
+
+        BigDecimal cpu = e.getMaterial().getCostPerUnit();
+
         BigDecimal volume = e.getVolume().divide(BigDecimal.valueOf(1000));
-        
+
         BigDecimal result = cpu.multiply(volume);
-        
+
         try {
             lblCost.setText("Cost: " + df.format(result) + " €");
-                   
+
         } catch (Exception ex) {
             lblCost.setText(df.format(0));
         }
-        
-        
-        
-        
-        
+
     }
 
     @Override
     public void fillModel() {
 
         var e = control.getEntitet();
-        
-        
-        
-        try {
-            e.setPrinter((Printer) cmbPrinters.getSelectedItem());
-        } catch (Exception ex) {
+
+        if (cmbPrinters.getSelectedIndex() == 0) {
             e.setPrinter(null);
+        } else {
+            e.setPrinter((Printer) cmbPrinters.getSelectedItem());
         }
-        
-        try {
-            e.setPart((Part) cmbParts.getSelectedItem());
-        } catch (Exception ex) {
+
+        if (cmbParts.getSelectedIndex() == 0) {
             e.setPart(null);
+        } else {
+            e.setPart((Part) cmbParts.getSelectedItem());
         }
-        
-        
-        
-        try {
+
+        if (cmbMaterials.getSelectedIndex() == 0) {
+            e.setMaterial(null);
+        } else {
             e.setMaterial((Material) cmbMaterials.getSelectedItem());
-        } catch (Exception ex) {
-           e.setMaterial(null);
         }
-        
-        
-        
+
         try {
             e.setVolume(BigDecimal.valueOf(Double.parseDouble(txtVolume.getText())));
         } catch (Exception ex) {
             e.setVolume(BigDecimal.ZERO);
         }
-        
+
         try {
             e.setPrintTime(Integer.valueOf(txtTime.getText()));
         } catch (Exception ex) {
             e.setPrintTime(0);
-        }   
-               
+        }
+
         e.setResult(chkResult.isSelected());
 
     }
@@ -413,14 +403,14 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface{
     }//GEN-LAST:event_cmbMaterialsActionPerformed
 
     private void lstDataValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_lstDataValueChanged
-        if(evt.getValueIsAdjusting()){
+        if (evt.getValueIsAdjusting()) {
             return;
         }
-        if(lstData.getSelectedValue()==null){
+        if (lstData.getSelectedValue() == null) {
             return;
         }
         control.setEntitet(lstData.getSelectedValue());
-        
+
         fillView();
     }//GEN-LAST:event_lstDataValueChanged
 

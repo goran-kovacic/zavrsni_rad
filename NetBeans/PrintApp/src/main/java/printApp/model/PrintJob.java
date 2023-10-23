@@ -1,6 +1,7 @@
 package printApp.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.math.BigDecimal;
 
@@ -15,8 +16,9 @@ public class PrintJob extends Entitet {
     @ManyToOne
     private Printer printer;
     @ManyToOne
+    @JoinColumn(name = "material", nullable = true)
     private Material material;
-    @ManyToOne
+    @ManyToOne    
     private Part part;
 
     public PrintJob() {
