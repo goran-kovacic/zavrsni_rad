@@ -39,6 +39,7 @@ public class PrintJobController extends Controller<PrintJob> {
         
         controlVolume();
         controlPrintTime();
+        controlMaterial();
     }
 
     @Override
@@ -77,6 +78,12 @@ public class PrintJobController extends Controller<PrintJob> {
             throw new PrintAppException("Print time must be a positive number!");
         }
 
+    }
+
+    private void controlMaterial() throws PrintAppException{
+       if(entitet.getMaterial()==null){
+           throw new PrintAppException("Select resin");
+       }
     }
 
 }

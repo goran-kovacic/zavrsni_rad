@@ -17,6 +17,7 @@ import java.util.Locale;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import printApp.controller.ProjectController;
+import printApp.model.Part;
 import printApp.model.Project;
 import printApp.util.PrintAppException;
 import printApp.util.Util;
@@ -64,7 +65,7 @@ public class ProjectsFrame extends javax.swing.JFrame implements ViewInterface {
         dpCompletionDate.setSettings(dps);
 
     }
-
+    
     @Override
     public void load() {
         DefaultListModel<Project> p = new DefaultListModel<>();
@@ -178,6 +179,8 @@ public class ProjectsFrame extends javax.swing.JFrame implements ViewInterface {
         jLabel9 = new javax.swing.JLabel();
         dpCompletionDate = new com.github.lgooddatepicker.components.DatePicker();
         tglCompleted = new javax.swing.JToggleButton();
+        btnDelete1 = new javax.swing.JButton();
+        btnDelete2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -251,6 +254,20 @@ public class ProjectsFrame extends javax.swing.JFrame implements ViewInterface {
             }
         });
 
+        btnDelete1.setText("Del. only project");
+        btnDelete1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelete1ActionPerformed(evt);
+            }
+        });
+
+        btnDelete2.setText("Del. project and parts");
+        btnDelete2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDelete2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -303,7 +320,11 @@ public class ProjectsFrame extends javax.swing.JFrame implements ViewInterface {
                                         .addComponent(lblPrintTime, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel7))
-                                    .addComponent(dpCreationDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(dpCreationDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnDelete1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnDelete2)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -347,7 +368,11 @@ public class ProjectsFrame extends javax.swing.JFrame implements ViewInterface {
                             .addComponent(btnAdd)
                             .addComponent(btnEdit)
                             .addComponent(btnDelete))
-                        .addGap(58, 58, 58)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnDelete1)
+                            .addComponent(btnDelete2))
+                        .addGap(17, 17, 17)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -397,68 +422,45 @@ public class ProjectsFrame extends javax.swing.JFrame implements ViewInterface {
         if (lstData.getSelectedValue() == null) {
             return;
         }
-        Object[] buttons = { "Delete only project" , "Delete projects and parts" , "Cancel" };
-        
+        Object[] buttons = {"Delete only project", "Delete projects and parts", "Cancel"};
+
         var e = lstData.getSelectedValue();
 
-//        if (JOptionPane.showConfirmDialog(getRootPane(),
-//                "Are you sure you want to delete project: \n\n" + e.getProjectName(),
-//                "Delete project?",
-//                JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
-//            return;
-//        }
+        switch (JOptionPane.showOptionDialog(getRootPane(),
+                "Delete project and parts or only project ",
+                "Delete",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                buttons, null)) {
 
-        if(JOptionPane.showOptionDialog(getRootPane(),
-                "Delete project and parts or only project ", 
-                "Delete",
-                JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                buttons, null) == JOptionPane.YES_OPTION){
-            
-            control.setEntitet(e);
-        
-            try {
-            control.delete();
-            load();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
-        }
-            
-        }else if(JOptionPane.showOptionDialog(getRootPane(),
-                "Delete project and parts or only project ", 
-                "Delete",
-                JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                buttons, null) == JOptionPane.NO_OPTION){
-            
-            control.setEntitet(e);
-//            ProjectController pc = new ProjectController();
-            try {
-                control.deleteProjectPartPrintJob();
-               
-            } catch (Exception ex) {
-            }
-            
-        }else if(JOptionPane.showOptionDialog(getRootPane(),
-                "Delete project and parts or only project ", 
-                "Delete",
-                JOptionPane.YES_NO_CANCEL_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                buttons, null) == JOptionPane.CANCEL_OPTION){
-            return;
+            case JOptionPane.YES_OPTION:
+                control.setEntitet(e);
+
+                try {
+                    control.delete();
+                    load();
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
+                }
+
+            case JOptionPane.NO_OPTION:
+                control.setEntitet(e);
+                try {
+                    control.deleteProjectPartPrintJob();
+                    load();
+                } catch (Exception ex) {
+                }
+                
+            case JOptionPane.CANCEL_OPTION:
+                return;
+                
+
         }
         
+        load();
         
 
-//        try {
-//            control.delete();
-//            load();
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
-//        }
 
     }//GEN-LAST:event_btnDeleteActionPerformed
 
@@ -496,10 +498,72 @@ public class ProjectsFrame extends javax.swing.JFrame implements ViewInterface {
 
     }//GEN-LAST:event_tglCompletedActionPerformed
 
+    private void btnDelete1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelete1ActionPerformed
+        if (lstData.getSelectedValue() == null) {
+            return;
+        }
+        var e = lstData.getSelectedValue();
+
+        if (JOptionPane.showConfirmDialog(getRootPane(),
+                "Are you sure you want to delete project: \n\n" + e.getProjectName(),
+                "Delete project?",
+                JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+        try {
+            control.delete();
+            load();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
+        }
+        
+        
+    }//GEN-LAST:event_btnDelete1ActionPerformed
+
+    private void btnDelete2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelete2ActionPerformed
+       if (lstData.getSelectedValue() == null) {
+            return;
+        }
+        var e = lstData.getSelectedValue();
+        
+        StringBuilder sb = new StringBuilder();
+        sb.append("Are you sure you want to delete project and associated parts: \n");
+        try {
+            for(Part p : control.getEntitet().getParts()){
+            sb.append(p.getPartName());
+            sb.append("\n");
+            
+        }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
+        }
+        
+        
+        sb.append("");
+        
+        if (JOptionPane.showConfirmDialog(getRootPane(),
+                sb,
+                "Delete project?",
+                JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+            return;
+        }
+        
+        try {
+            control.deleteProjectPartPrintJob();
+            load();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
+        }
+        
+    }//GEN-LAST:event_btnDelete2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDelete1;
+    private javax.swing.JButton btnDelete2;
     private javax.swing.JButton btnEdit;
     private javax.swing.JCheckBox chkCompleted;
     private com.github.lgooddatepicker.components.DatePicker dpCompletionDate;
