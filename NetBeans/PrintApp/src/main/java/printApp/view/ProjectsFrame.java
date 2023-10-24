@@ -184,7 +184,6 @@ public class ProjectsFrame extends javax.swing.JFrame implements ViewInterface {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        lstData.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         lstData.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
             public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
                 lstDataValueChanged(evt);
