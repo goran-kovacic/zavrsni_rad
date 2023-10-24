@@ -72,6 +72,8 @@ public class InitialInsert {
 
         setPassword();
     }
+    
+    
 
     private void createProjects() {
         Project p;
@@ -90,9 +92,9 @@ public class InitialInsert {
             } catch (Exception e) {
             }
             
-            p.setTotalCost(new BigDecimal(faker.number().numberBetween(10, 100)));
-            p.setTotalPrintCount(faker.number().numberBetween(1, 10));
-            p.setTotalPrintTime(faker.number().numberBetween(10, 100));
+//            p.setTotalCost(new BigDecimal(faker.number().numberBetween(10, 100)));
+//            p.setTotalPrintCount(faker.number().numberBetween(1, 10));
+//            p.setTotalPrintTime(faker.number().numberBetween(10, 100));
 
             session.persist(p);
             projects.add(p);
@@ -138,9 +140,9 @@ public class InitialInsert {
         PrintJob p;
         for (int i = 0; i < NUMBER_OF_JOBS; i++) {
             p = new PrintJob();
-            p.setPrintTime(faker.number().numberBetween(1, 10));
+            p.setPrintTime(faker.number().numberBetween(30, 300));
             p.setResult(faker.bool().bool());
-            p.setVolume(new BigDecimal(faker.number().numberBetween(0, 500)));
+            p.setVolume(new BigDecimal(faker.number().numberBetween(50, 500)));
             p.setMaterial(materials.get(faker.number().numberBetween(0, NUMBER_OF_MATERIALS - 1)));
             p.setPart(parts.get(faker.number().numberBetween(0, NUMBER_OF_PARTS - 1)));
             p.setPrinter(printers.get(faker.number().numberBetween(0, NUMBER_OF_PRINTERS - 1)));
@@ -159,8 +161,8 @@ public class InitialInsert {
             p.setSlicedFile("C:\\" + faker.file().fileName());
             p.setProject(projects.get(faker.number().numberBetween(0, NUMBER_OF_PROJECTS - 1)));
             
-            p.setCost(new BigDecimal(faker.number().numberBetween(10, 100)));
-            p.setPrintTime(faker.number().numberBetween(1, 10));
+            //p.setCost(new BigDecimal(faker.number().numberBetween(10, 100)));
+            //p.setPrintTime(faker.number().numberBetween(1, 10));
             
             
             session.persist(p);
@@ -186,30 +188,6 @@ public class InitialInsert {
             e.printStackTrace();
         }
 
-    }
-
-    private void updatePrinters() {
-        //List<PrintJob> l = session.createQuery("from PrintJob", PrintJob.class).list();
-                     
-        //PrinterController pc = new PrinterController();
-                
-       var p = new Printer();
-       
-       List<PrintJob> lp = p.getPrintJobs();
-        
-        
-        for (PrintJob pj : lp) {
-            
-            int count = 0;
-            
-//            p.setFepCount(pj.getPrinter().setFepCount(count++));
-            
-            pj.getPrinter().setFepCount(count++);
-           session.update(p);
-           printers.add(p);
-                   
-            
-        }
-    }
-
+    }       
+  
 }

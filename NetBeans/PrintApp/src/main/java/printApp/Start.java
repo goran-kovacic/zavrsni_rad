@@ -12,6 +12,7 @@ import printApp.model.Project;
 import printApp.util.HibernateUtil;
 import printApp.util.InitialInsert;
 import printApp.util.PrintAppException;
+import printApp.util.UpdateInserts;
 import printApp.view.SplashScreen;
 
 /**
@@ -22,8 +23,10 @@ public class Start {
 
     public static void main(String[] args) throws PrintAppException {
 
-//        HibernateUtil.getSession();
+        HibernateUtil.getSession();
 //        new InitialInsert();
+//        new UpdateInserts();
+        
         new SplashScreen().setVisible(true);
 
     }

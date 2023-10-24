@@ -124,7 +124,7 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
         
     }
     
-    private Integer time(){
+    public Integer time(){
         
         var e = control.getEntitet();
         
