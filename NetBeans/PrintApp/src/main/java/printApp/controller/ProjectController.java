@@ -38,6 +38,8 @@ public class ProjectController extends Controller<Project> {
     
     public void deleteProjectPartPrintJob() throws PrintAppException{
         
+        refresh();
+        
         PartController pc = new PartController();
         ProjectController prc = new ProjectController();
               

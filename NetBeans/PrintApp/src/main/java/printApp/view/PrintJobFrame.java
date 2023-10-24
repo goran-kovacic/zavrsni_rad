@@ -228,17 +228,28 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
 
         e.setResult(chkResult.isSelected());
         
-        if(e.getPart().getProject().getTotalCost()==null){
+        try {
+            if(e.getPart().getProject().getTotalCost()==null){
             e.getPart().getProject().setTotalCost(BigDecimal.ZERO);
         }
+        } catch (Exception ex) {
+        }
         
-        if(e.getPart().getProject().getTotalPrintTime()==null){
+        try {
+            if(e.getPart().getProject().getTotalPrintTime()==null){
             e.getPart().getProject().setTotalPrintTime(0);
         }
+        } catch (Exception ex) {
+        }
         
-        if(e.getPart().getProject().getTotalPrintCount()==null){
+        try {
+            if(e.getPart().getProject().getTotalPrintCount()==null){
             e.getPart().getProject().setTotalPrintCount(0);
         }
+        } catch (Exception ex) {
+        }
+        
+        
         
         
         
@@ -451,11 +462,17 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
         control.setEntitet(new PrintJob());
         fillModel();
         var e = control.getEntitet();
-        if(e.isResult()){
+        
+        try {
+            if(e.isResult()){
            e.getPart().getProject().setTotalPrintCount(e.getPart().getProject().getTotalPrintCount() + 1); 
            e.getPart().getProject().setTotalCost((e.getPart().getProject().getTotalCost()).add(cost()));
            e.getPart().getProject().setTotalPrintTime(e.getPart().getProject().getTotalPrintTime() + time());
         }
+        } catch (Exception ex) {
+        }
+        
+        
         
         try {
             control.create();

@@ -4,6 +4,7 @@
  */
 package printApp.view;
 
+import java.time.Clock;
 import javax.swing.JOptionPane;
 import printApp.util.Util;
 
@@ -33,6 +34,11 @@ public class Menu extends javax.swing.JFrame {
 
         jToolBar1 = new javax.swing.JToolBar();
         lblUser = new javax.swing.JLabel();
+        btnProjects = new javax.swing.JButton();
+        bntParts = new javax.swing.JButton();
+        btnPrints = new javax.swing.JButton();
+        btnResins = new javax.swing.JButton();
+        btnPrinters = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -48,6 +54,41 @@ public class Menu extends javax.swing.JFrame {
 
         jToolBar1.setRollover(true);
         jToolBar1.add(lblUser);
+
+        btnProjects.setText("Projects");
+        btnProjects.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProjectsActionPerformed(evt);
+            }
+        });
+
+        bntParts.setText("Parts");
+        bntParts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bntPartsActionPerformed(evt);
+            }
+        });
+
+        btnPrints.setText("Prints");
+        btnPrints.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintsActionPerformed(evt);
+            }
+        });
+
+        btnResins.setText("Resins");
+        btnResins.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResinsActionPerformed(evt);
+            }
+        });
+
+        btnPrinters.setText("Printers");
+        btnPrinters.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintersActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("File");
 
@@ -119,14 +160,37 @@ public class Menu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnProjects)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bntParts)
+                        .addGap(82, 82, 82)
+                        .addComponent(btnPrints)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(btnResins)
+                .addGap(18, 18, 18)
+                .addComponent(btnPrinters)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 252, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnProjects)
+                    .addComponent(bntParts)
+                    .addComponent(btnPrints))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 194, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnResins)
+                    .addComponent(btnPrinters))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -139,7 +203,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-       dispose();
+        System.exit(0);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -162,9 +226,34 @@ public class Menu extends javax.swing.JFrame {
        new PrintJobFrame().setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
+    private void btnProjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProjectsActionPerformed
+       new ProjectsFrame().setVisible(true);
+    }//GEN-LAST:event_btnProjectsActionPerformed
+
+    private void bntPartsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bntPartsActionPerformed
+       new PartsFrame().setVisible(true);
+    }//GEN-LAST:event_bntPartsActionPerformed
+
+    private void btnPrintsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintsActionPerformed
+       new PrintJobFrame().setVisible(true);
+    }//GEN-LAST:event_btnPrintsActionPerformed
+
+    private void btnResinsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResinsActionPerformed
+        new MaterialFrame().setVisible(true);
+    }//GEN-LAST:event_btnResinsActionPerformed
+
+    private void btnPrintersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintersActionPerformed
+        new PrinterFrame().setVisible(true);
+    }//GEN-LAST:event_btnPrintersActionPerformed
+
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bntParts;
+    private javax.swing.JButton btnPrinters;
+    private javax.swing.JButton btnPrints;
+    private javax.swing.JButton btnProjects;
+    private javax.swing.JButton btnResins;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;

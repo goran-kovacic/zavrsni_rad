@@ -67,7 +67,13 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
 
         var e = control.getEntitet();
         e.setPartName(txtName.getText());
-        e.setProject((Project) cmbProject.getSelectedItem());
+        
+        if(cmbProject.getSelectedIndex()==0){
+            e.setProject(null);
+        }else{
+            e.setProject((Project) cmbProject.getSelectedItem());
+        }
+        
 
         if (txtOriginal.getText().isBlank()) {
             e.setStlOriginal(null);

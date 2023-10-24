@@ -56,6 +56,8 @@ public class PartController extends Controller<Part> {
 
     @Override
     public void delete() throws PrintAppException {
+        refresh();
+        
         PrintJobController pjb = new PrintJobController();
         PartController pc = new PartController();
         for (PrintJob p : entitet.getPrintJobs()) {
@@ -67,6 +69,8 @@ public class PartController extends Controller<Part> {
             }
 
         }
+        
+//        super.delete();
 
         pc.setEntitet(getEntitet());
         session.beginTransaction();

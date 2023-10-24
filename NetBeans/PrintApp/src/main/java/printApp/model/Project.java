@@ -3,9 +3,11 @@ package printApp.model;
 import jakarta.persistence.Column;
 import java.util.Date;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,8 +27,8 @@ public class Project extends Entitet {
     @Column(nullable = true)
     private BigDecimal totalCost;
     private String projectDescription;
-    @OneToMany(mappedBy ="project" )
-    private List<Part> parts;
+    @OneToMany(mappedBy ="project", fetch = FetchType.EAGER )
+    private List<Part> parts = new ArrayList<>();
 
     public Project(String projectName, Date creationDate, Date completionDate, boolean isCompleted, Integer totalPrintTime, Integer totalPrintCount, BigDecimal totalCost, String projectDescription, List<Part> parts, Integer id) {
         super(id);

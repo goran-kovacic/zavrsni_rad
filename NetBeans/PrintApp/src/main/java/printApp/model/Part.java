@@ -2,6 +2,7 @@ package printApp.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.math.BigDecimal;
@@ -20,7 +21,7 @@ public class Part extends Entitet {
     private Project project;
     private BigDecimal cost;
     private Integer printTime;
-    @OneToMany(mappedBy = "part")
+    @OneToMany(mappedBy = "part", fetch = FetchType.EAGER)
     private List<PrintJob> printJobs;
 
     public Part(Integer id, String partName, String stlOriginal, String stlSupported, String slicedFile, Project project, BigDecimal cost, Integer printTime) {
