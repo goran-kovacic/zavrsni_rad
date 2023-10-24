@@ -169,7 +169,7 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
 
         chkResult.setSelected(e.isResult());
 
-        txtTime.setText(String.valueOf(e.getPrintTime()));
+        
 
         
 
@@ -227,6 +227,22 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
         }
 
         e.setResult(chkResult.isSelected());
+        
+        if(e.getPart().getProject().getTotalCost()==null){
+            e.getPart().getProject().setTotalCost(BigDecimal.ZERO);
+        }
+        
+        if(e.getPart().getProject().getTotalPrintTime()==null){
+            e.getPart().getProject().setTotalPrintTime(0);
+        }
+        
+        if(e.getPart().getProject().getTotalPrintCount()==null){
+            e.getPart().getProject().setTotalPrintCount(0);
+        }
+        
+        
+        
+        
 
     }
 
@@ -252,8 +268,6 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
         jLabel5 = new javax.swing.JLabel();
         chkResult = new javax.swing.JCheckBox();
         jLabel6 = new javax.swing.JLabel();
-        txtTime = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
         lblCost = new javax.swing.JLabel();
         btnAdd = new javax.swing.JButton();
         btnEdit = new javax.swing.JButton();
@@ -293,14 +307,6 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
         chkResult.setText("Result");
 
         jLabel6.setText("Print time:");
-
-        txtTime.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTimeActionPerformed(evt);
-            }
-        });
-
-        jLabel7.setText("min");
 
         lblCost.setText("Cost:");
 
@@ -349,51 +355,44 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
                     .addComponent(cmbShowPrints, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel1)
+                        .addComponent(cmbParts, 0, 121, Short.MAX_VALUE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel3)
+                        .addComponent(cmbPrinters, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cmbMaterials, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel6)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel4)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel1)
-                                .addComponent(cmbParts, 0, 121, Short.MAX_VALUE)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)
-                                .addComponent(cmbPrinters, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cmbMaterials, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jLabel6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtVolume, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtVolume, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtHours, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel9)))
+                                .addComponent(txtHours, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(27, 27, 27)
-                                        .addComponent(chkResult))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel10))))
+                                .addComponent(jLabel9)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnAdd)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnDelete))
+                                .addComponent(jLabel5)
+                                .addGap(27, 27, 27)
+                                .addComponent(chkResult))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel8)
+                                .addComponent(txtMinutes, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblCost, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(jLabel10))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(72, 72, 72)
-                        .addComponent(txtTime, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnAdd)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel7)))
+                        .addComponent(btnDelete))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblCost, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -439,11 +438,7 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
                             .addComponent(btnAdd)
                             .addComponent(btnEdit)
                             .addComponent(btnDelete))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 39, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addContainerGap())
+                        .addContainerGap(67, Short.MAX_VALUE))
                     .addComponent(jScrollPane1)))
         );
 
@@ -455,6 +450,13 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
 
         control.setEntitet(new PrintJob());
         fillModel();
+        var e = control.getEntitet();
+        if(e.isResult()){
+           e.getPart().getProject().setTotalPrintCount(e.getPart().getProject().getTotalPrintCount() + 1); 
+           e.getPart().getProject().setTotalCost((e.getPart().getProject().getTotalCost()).add(cost()));
+           e.getPart().getProject().setTotalPrintTime(e.getPart().getProject().getTotalPrintTime() + time());
+        }
+        
         try {
             control.create();
             load();
@@ -468,22 +470,27 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
 
-        if (lstData.getSelectedValue() == null) {
-            return;
-        }
-
-        var e = lstData.getSelectedValue();
-        control.setEntitet(e);
-
-        fillModel();
-        try {
-            control.update();
-            load();
-        } catch (PrintAppException ex) {
-            JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
-        }
-
-        control.refresh();
+        JOptionPane.showMessageDialog(getRootPane(), """
+                                                     There is no need to edit print jobs.
+                                                     This option should be removed.""");
+        
+//        if (lstData.getSelectedValue() == null) {
+//            return;
+//        }
+//
+//        var e = lstData.getSelectedValue();
+//        control.setEntitet(e);
+//
+//        fillModel();
+//
+//        try {
+//            control.update();
+//            load();
+//        } catch (PrintAppException ex) {
+//            JOptionPane.showMessageDialog(getRootPane(), ex.getMessage());
+//        }
+//
+//        control.refresh();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
@@ -498,6 +505,15 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
                 JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
             return;
         }
+        
+        if(control.getEntitet().isResult()){
+            control.getEntitet().getPart().getProject().setTotalPrintCount(control.getEntitet().getPart().getProject().getTotalPrintCount() - 1);
+            control.getEntitet().getPart().getProject().setTotalCost((control.getEntitet().getPart().getProject().getTotalCost()).subtract(cost()));
+            control.getEntitet().getPart().getProject().setTotalPrintTime(control.getEntitet().getPart().getProject().getTotalPrintTime()-time());
+
+        }
+        
+       
 
         try {
             control.delete();
@@ -552,10 +568,6 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
         }
     }//GEN-LAST:event_cmbShowPrintsActionPerformed
 
-    private void txtTimeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTimeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTimeActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -573,7 +585,6 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
@@ -581,7 +592,6 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
     private javax.swing.JList<PrintJob> lstData;
     private javax.swing.JTextField txtHours;
     private javax.swing.JTextField txtMinutes;
-    private javax.swing.JTextField txtTime;
     private javax.swing.JTextField txtVolume;
     // End of variables declaration//GEN-END:variables
 }
