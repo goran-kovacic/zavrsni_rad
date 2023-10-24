@@ -38,7 +38,7 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
         initComponents();
 
         DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.of("en", "EN"));
-        df = new DecimalFormat("###,##0.00", dfs);
+        df = new DecimalFormat("####.##", dfs);
 
         setTitle(Util.APP_NAME + " | Print Jobs");
         control = new PrintJobController();
@@ -49,6 +49,14 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
 
         load();
 
+    }
+    
+    private void showPartsByStatus() {
+        
+        DefaultComboBoxModel<Part> m = new DefaultComboBoxModel<>();
+        Part p = new Part();
+        
+        
     }
 
     private void loadMaterials() {
@@ -220,6 +228,7 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
         btnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
+        cmbShowPrints = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -277,13 +286,24 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
 
         jLabel8.setText("Cost (€):");
 
+        cmbShowPrints.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Show all prints", "Show successful prints", "Show failed prints" }));
+        cmbShowPrints.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        cmbShowPrints.setName(""); // NOI18N
+        cmbShowPrints.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbShowPrintsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+                    .addComponent(cmbShowPrints, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
@@ -322,12 +342,14 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbParts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbShowPrints, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cmbParts, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cmbPrinters, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -357,9 +379,8 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
                             .addComponent(btnAdd)
                             .addComponent(btnEdit)
                             .addComponent(btnDelete))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE))
-                .addContainerGap())
+                        .addContainerGap(67, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)))
         );
 
         pack();
@@ -438,6 +459,32 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
         fillView();
     }//GEN-LAST:event_lstDataValueChanged
 
+    private void cmbShowPrintsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbShowPrintsActionPerformed
+
+        switch (cmbShowPrints.getSelectedIndex()) {
+            case 0:
+                DefaultListModel<PrintJob> p = new DefaultListModel<>();
+                p.addAll(control.read());
+                lstData.setModel(p);
+                lstData.repaint();
+                break;
+            case 1:
+                DefaultListModel<PrintJob> m = new DefaultListModel<>();
+                m.addAll(control.readBySuccessfulPrint());
+                lstData.setModel(m);
+                lstData.repaint();
+                break;
+            case 2:
+                DefaultListModel<PrintJob> n = new DefaultListModel<>();
+                n.addAll(control.readByFailedPrint());
+                lstData.setModel(n);
+                lstData.repaint();
+                break;
+            default:
+                break;
+        }
+    }//GEN-LAST:event_cmbShowPrintsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -447,6 +494,7 @@ public class PrintJobFrame extends javax.swing.JFrame implements ViewInterface {
     private javax.swing.JComboBox<Material> cmbMaterials;
     private javax.swing.JComboBox<Part> cmbParts;
     private javax.swing.JComboBox<Printer> cmbPrinters;
+    private javax.swing.JComboBox<String> cmbShowPrints;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

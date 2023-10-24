@@ -35,6 +35,16 @@ public class PrintJobController extends Controller<PrintJob> {
     public List<PrintJob> read() {
         return session.createQuery("from PrintJob", PrintJob.class).list();
     }
+    
+    public List<PrintJob> readBySuccessfulPrint(){
+//        return session.createQuery("from PrintJob p where p.result=true").list();
+        
+        return session.createQuery("from PrintJob p where p.result=true", PrintJob.class).list();
+    }
+    
+    public List<PrintJob> readByFailedPrint(){
+        return session.createQuery("from PrintJob p where p.result=false", PrintJob.class).list();
+    }
 
     @Override
     protected void controlCreate() throws PrintAppException {
@@ -71,7 +81,9 @@ public class PrintJobController extends Controller<PrintJob> {
         }
 
         if (entitet.getVolume().floatValue() <= 0f) {
-            throw new PrintAppException("Volume must be a positive number!");
+            throw new PrintAppException("""
+                                        Volume must be a positive number!
+                                        If writing decimals use period as separator.""");
         }
 
     }
@@ -82,7 +94,7 @@ public class PrintJobController extends Controller<PrintJob> {
         }
 
         if (entitet.getPrintTime() <= 0) {
-            throw new PrintAppException("Print time must be a positive number!");
+            throw new PrintAppException("Print time must be a positive integer number!");
         }
 
     }

@@ -18,6 +18,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.plaf.ComboBoxUI;
 import printApp.controller.PartController;
 import printApp.controller.ProjectController;
@@ -100,20 +101,18 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
         txtOriginal.setText(e.getStlOriginal());
         txtSupported.setText(e.getStlSupported());
         txtSliced.setText(e.getSlicedFile());
-        
+
         try {
             lblPrintTime.setText(df.format(e.getPrintTime()));
         } catch (Exception ex) {
             lblPrintTime.setText(df.format(0));
         }
-        
+
         try {
             lblCost.setText(df.format(e.getCost()));
         } catch (Exception ex) {
             lblCost.setText(df.format(0));
         }
-        
-        
 
     }
 
@@ -272,8 +271,18 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
         });
 
         btnOpenSupported.setText("Open");
+        btnOpenSupported.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenSupportedActionPerformed(evt);
+            }
+        });
 
         btnOpenSliced.setText("Open");
+        btnOpenSliced.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenSlicedActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -404,6 +413,23 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
     private void btnBrowseOriginalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseOriginalActionPerformed
         try {
             JFileChooser chooser = new JFileChooser();
+
+            chooser.setFileFilter(new FileFilter() {
+
+                public String getDescription() {
+                    return "3D objects (*.stl, *.obj, *.3mf)";
+                }
+
+                public boolean accept(File f) {
+                    if (f.isDirectory()) {
+                        return true;
+                    } else {
+                        String filename = f.getName().toLowerCase();
+                        return filename.endsWith(".stl") || filename.endsWith(".obj") || filename.endsWith(".3mf");
+                    }
+                }
+            });
+
             chooser.showOpenDialog(getRootPane());
             File f = chooser.getSelectedFile();
             String fileName = f.getAbsolutePath();
@@ -417,7 +443,24 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
 
     private void btnBrowseSupportedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseSupportedActionPerformed
         try {
-            JFileChooser chooser = new JFileChooser();            
+            JFileChooser chooser = new JFileChooser();
+            
+            chooser.setFileFilter(new FileFilter() {
+
+                public String getDescription() {
+                    return "3D objects (*.stl, *.obj, *.3mf)";
+                }
+
+                public boolean accept(File f) {
+                    if (f.isDirectory()) {
+                        return true;
+                    } else {
+                        String filename = f.getName().toLowerCase();
+                        return filename.endsWith(".stl") || filename.endsWith(".obj") || filename.endsWith(".3mf");
+                    }
+                }
+            });
+            
             chooser.showOpenDialog(getRootPane());
             File f = chooser.getSelectedFile();
             String fileName = f.getAbsolutePath();
@@ -428,7 +471,7 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
 
     private void btnBrowseSlicedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseSlicedActionPerformed
         try {
-            JFileChooser chooser = new JFileChooser();
+            JFileChooser chooser = new JFileChooser();                                    
             chooser.showOpenDialog(getRootPane());
             File f = chooser.getSelectedFile();
             String fileName = f.getAbsolutePath();
@@ -536,11 +579,23 @@ public class PartsFrame extends javax.swing.JFrame implements ViewInterface {
     private void btnOpenOriginalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenOriginalActionPerformed
         try {
             Desktop.getDesktop().open(new File(txtOriginal.getText()));
-        } catch (IOException ex) {
-//            Logger.getLogger(PartsFrame.class.getName()).log(Level.SEVERE, null, ex);
-              JOptionPane.showMessageDialog(getRootPane(), "file doesnt exist");
+        } catch (Exception ex) {
         }
     }//GEN-LAST:event_btnOpenOriginalActionPerformed
+
+    private void btnOpenSupportedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenSupportedActionPerformed
+        try {
+            Desktop.getDesktop().open(new File(txtSupported.getText()));
+        } catch (Exception ex) {
+        }
+    }//GEN-LAST:event_btnOpenSupportedActionPerformed
+
+    private void btnOpenSlicedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOpenSlicedActionPerformed
+        try {
+            Desktop.getDesktop().open(new File(txtSliced.getText()));
+        } catch (Exception ex) {
+        }
+    }//GEN-LAST:event_btnOpenSlicedActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
